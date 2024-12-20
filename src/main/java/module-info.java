@@ -14,6 +14,9 @@ module me.t3sl4.hydraulic.launcher {
     requires java.logging;
     requires javafx.swing;
     requires org.json;
+    requires okhttp3;
+    requires org.yaml.snakeyaml;
+    requires java.net.http;
 
     opens me.t3sl4.hydraulic.launcher to javafx.fxml;
     exports me.t3sl4.hydraulic.launcher;

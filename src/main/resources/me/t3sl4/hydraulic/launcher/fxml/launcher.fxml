@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.t3sl4.hydraulic.launcher.controller.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.t3sl4.hydraulic.launcher.controller.MainController">
     <children>
         <BorderPane prefHeight="670.0" prefWidth="850.0" style="-fx-border-radius: 2em; -fx-background-color: transparent;">
             <left>
@@ -61,7 +62,7 @@
                                 <Font name="TextaAlt-Regular" size="12.0" />
                             </font>
                         </Button>
-                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Favori Hesaplar" textFill="WHITE">
+                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" onAction="#favouritedAccounts" stylesheets="@../styling/style.css" text="Favori Hesaplar" textFill="WHITE">
                             <graphic>
                                 <ImageView fitHeight="24.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -73,7 +74,7 @@
                                 <Font name="TextaAlt-Regular" size="12.0" />
                             </font>
                         </Button>
-                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Silinen Hesaplar" textFill="WHITE">
+                        <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" onAction="#deletedAccounts" stylesheets="@../styling/style.css" text="Silinen Hesaplar" textFill="WHITE">
                             <graphic>
                                 <ImageView fitHeight="24.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -280,7 +281,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="48.0" prefWidth="263.0">
                      <children>
-                        <TextField prefHeight="25.0" prefWidth="185.0" promptText="Hesaplarında Ara" stylesheets="@../styling/style.css">
+                        <TextField fx:id="accountSearchBar" prefHeight="25.0" prefWidth="185.0" promptText="Hesaplarında Ara" stylesheets="@../styling/style.css">
                            <HBox.margin>
                               <Insets right="20.0" />
                            </HBox.margin>
@@ -288,9 +289,9 @@
                                 <Font name="TextaAlt-Regular" size="13.0" />
                             </font>
                         </TextField>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #175DDC; -fx-border-radius: 5em;">
+                        <Button mnemonicParsing="false" onAction="#addAccount" style="-fx-background-color: #175DDC; -fx-border-radius: 5em;">
                            <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="accountAddButton" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../../../../assets/icons/icon_plus.png" />
                                  </image>
@@ -299,44 +300,60 @@
                         </Button>
                      </children>
                   </HBox>
+                  <ScrollPane hbarPolicy="NEVER" prefHeight="624.0" prefWidth="263.0" style="-fx-background-color: #1E1E1E;" vbarPolicy="NEVER">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="622.0" prefWidth="263.0" style="-fx-background-color: #1E1E1E;">
+                           <children>
+                              <VBox fx:id="savedUsersVBox" prefHeight="622.0" prefWidth="263.0" style="-fx-background-color: transparent;" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
                </children></VBox>
             </center>
             <right>
-                <Pane prefHeight="600.0" prefWidth="372.0" style="-fx-background-color: #1E1E1E;" BorderPane.alignment="CENTER">
+                <Pane fx:id="customDataPane" prefHeight="600.0" prefWidth="372.0" style="-fx-background-color: #1E1E1E;" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="25.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="customImageView" fitHeight="40.0" fitWidth="40.0" layoutX="25.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../assets/images/logo-sade.png" />
                      </image></ImageView>
-                  <Label layoutX="83.0" layoutY="85.0" text="Halil İbrahim Direktör" textFill="WHITE">
+                  <Label fx:id="customNameSurname" layoutX="83.0" layoutY="85.0" text="Halil İbrahim Direktör" textFill="WHITE">
                      <font>
                         <Font name="TextaAlt-Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label layoutX="83.0" layoutY="103.0" text="hidirektor@gmail.com" textFill="#9e9e9e">
+                  <Label fx:id="customUserName" layoutX="83.0" layoutY="103.0" text="hidirektor@gmail.com" textFill="#9e9e9e">
                      <font>
                         <Font name="TextaAlt-Bold" size="14.0" />
                      </font>
                   </Label>
-                  <Button layoutX="202.0" layoutY="13.0" mnemonicParsing="false" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Düzenle" textFill="WHITE">
-                     <graphic>
-                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../assets/icons/icon_edit.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button layoutX="297.0" layoutY="13.0" mnemonicParsing="false" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Sil" textFill="WHITE">
-                     <graphic>
-                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../assets/icons/icon_trash_gray.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="309.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
+                  <HBox fx:id="accountButtons" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="372.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="accountEditButton" mnemonicParsing="false" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Düzenle" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../../assets/icons/icon_edit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="accountDeleteButton" mnemonicParsing="false" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Sil" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../../../assets/icons/icon_trash_gray.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <ImageView fx:id="customFavouriteButton" fitHeight="32.0" fitWidth="32.0" layoutX="309.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../assets/icons/icon_star_normal.png" />
                      </image>
@@ -349,12 +366,12 @@
                               <Insets bottom="5.0" top="5.0" />
                            </VBox.margin>
                            <children>
-                              <Label text="Kullanıcı Adı" textFill="#9e9e9e">
+                              <Label text="Access Token" textFill="#9e9e9e">
                                  <font>
                                     <Font name="TextaAlt-Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <Label text="hidirektor" textFill="WHITE">
+                              <Label fx:id="accessTokenLabel" text="hidirektor" textFill="WHITE">
                                  <font>
                                     <Font name="TextaAlt-Bold" size="16.0" />
                                  </font>
@@ -373,7 +390,7 @@
                               </Label>
                               <HBox alignment="CENTER" prefWidth="320.0">
                                  <children>
-                                    <Label prefHeight="24.0" prefWidth="337.0" text="asdasd" textFill="WHITE" HBox.hgrow="NEVER">
+                                    <Label fx:id="passwordLabel" prefHeight="24.0" prefWidth="337.0" text="asdasd" textFill="WHITE" HBox.hgrow="NEVER">
                                        <font>
                                           <Font name="TextaAlt-Bold" size="16.0" />
                                        </font>
@@ -381,7 +398,7 @@
                                           <Insets left="5.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="customShowHidePass" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
@@ -389,7 +406,7 @@
                                           <Image url="@../../../../../assets/icons/icon_show_pass.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="copyPasswordButton" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
@@ -406,12 +423,41 @@
                               <Insets bottom="5.0" top="5.0" />
                            </VBox.margin>
                            <children>
+                              <Label text="Lisans Anahtarı" textFill="#9e9e9e">
+                                 <font>
+                                    <Font name="TextaAlt-Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" prefWidth="320.0">
+                                 <children>
+                                    <Label fx:id="licenseLabel" prefHeight="24.0" prefWidth="337.0" text="asdasd" textFill="WHITE" HBox.hgrow="NEVER">
+                                       <font>
+                                          <Font name="TextaAlt-Bold" size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <ImageView fx:id="copyLicenseButton" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                       <image>
+                                          <Image url="@../../../../../assets/icons/icon_copy.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER_LEFT" prefHeight="88.66" prefWidth="100.0">
+                           <children>
                               <Label text="Website" textFill="#9e9e9e">
                                  <font>
                                     <Font name="TextaAlt-Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <Label text="https://ondergrup.hidirektor.com.tr/#/login" textFill="WHITE">
+                              <Label fx:id="loginURL" text="https://ondergrup.hidirektor.com.tr/#/login" textFill="WHITE">
                                  <font>
                                     <Font name="TextaAlt-Bold" size="16.0" />
                                  </font>
@@ -434,6 +480,130 @@
                         </Label>
                      </children>
                   </VBox>
+                  <Pane fx:id="createAccountPane" prefHeight="670.0" prefWidth="372.0" style="-fx-background-color: #1E1E1E;" visible="false">
+                     <children>
+                        <HBox fx:id="accountButtons1" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="372.0" spacing="10.0">
+                           <children>
+                              <Button fx:id="accountLoginButton" mnemonicParsing="false" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Hesabı Ekle" textFill="WHITE">
+                                 <graphic>
+                                    <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../assets/icons/icon_login.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets right="10.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <ImageView fx:id="profilePhotoImageView" fitHeight="40.0" fitWidth="40.0" layoutX="25.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../assets/images/logo-sade.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="accountAddUserNameLabel" layoutX="83.0" layoutY="85.0" text="Veri bekleniyor..." textFill="WHITE">
+                           <font>
+                              <Font name="TextaAlt-Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="accountAddEmailLabel" layoutX="83.0" layoutY="103.0" text="Veri bekleniyor..." textFill="#9e9e9e">
+                           <font>
+                              <Font name="TextaAlt-Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#9e9e9e" height="1.5" layoutX="25.0" layoutY="142.0" stroke="#9e9e9e" strokeType="INSIDE" width="320.0" />
+                        <VBox layoutX="25.0" layoutY="157.0" prefHeight="306.0" prefWidth="320.0">
+                           <children>
+                              <VBox alignment="CENTER_LEFT" prefHeight="88.66" prefWidth="100.0">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="5.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <Label text="Kullanıcı Adı" textFill="#9e9e9e">
+                                       <font>
+                                          <Font name="TextaAlt-Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="userNameTextField" alignment="CENTER" prefHeight="25.0" prefWidth="291.0" promptText="Lütfen kullanıcı adınızı girin." style="-fx-background-color: #404040; -text-fill-color: #ffffff; -prompt-text-color: #ffffff; -fx-border-radius: 2em;" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT" prefHeight="88.66" prefWidth="100.0">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="5.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <Label text="Parola" textFill="#9e9e9e">
+                                       <font>
+                                          <Font name="TextaAlt-Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefWidth="320.0">
+                                       <children>
+                                          <TextField fx:id="passwordTextField" alignment="CENTER" prefHeight="25.0" prefWidth="291.0" promptText="Lütfen parolanızı girin." style="-fx-background-color: #404040; -text-fill-color: #ffffff; -prompt-text-color: #ffffff; -fx-border-radius: 2em;" />
+                                          <ImageView fx:id="showHidePasswordImageView" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                             <HBox.margin>
+                                                <Insets left="10.0" right="10.0" />
+                                             </HBox.margin>
+                                             <image>
+                                                <Image url="@../../../../../assets/icons/icon_show_pass.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT" prefHeight="88.66" prefWidth="100.0">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" top="5.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <Label text="Lisans Anahtarı" textFill="#9e9e9e">
+                                       <font>
+                                          <Font name="TextaAlt-Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" prefWidth="320.0">
+                                       <children>
+                                          <TextField fx:id="licenseKeyTextField" alignment="CENTER" prefHeight="25.0" prefWidth="320.0" promptText="Lütfen lisans anahtarınızı girin." style="-fx-background-color: #404040; -text-fill-color: #ffffff; -prompt-text-color: #ffffff; -fx-border-radius: 2em;" HBox.hgrow="NEVER" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT" prefHeight="88.66" prefWidth="100.0">
+                                 <children>
+                                    <Label text="İşlem Sonucu" textFill="#9e9e9e">
+                                       <font>
+                                          <Font name="TextaAlt-Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="requestResponse" text="İstek başarılı oldu :)" textFill="WHITE">
+                                       <font>
+                                          <Font name="TextaAlt-Bold" size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#9e9e9e" height="1.5" layoutX="25.0" layoutY="480.0" stroke="#9e9e9e" strokeType="INSIDE" width="320.0" />
+                        <VBox layoutX="25.0" layoutY="500.0" prefHeight="100.0" prefWidth="320.0">
+                           <children>
+                              <Label text="Notlar" textFill="#9e9e9e">
+                                 <font>
+                                    <Font name="TextaAlt-Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="TOP_LEFT" prefHeight="72.0" prefWidth="319.0" text="Harika deneyimler ilham verme, dönüştürme ve dünyayı ileriye taşıma gücüne sahiptir. Ve her harika deneyim yaratıcılıkla başlar." textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font name="TextaAlt-Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                  </Pane>
                </children></Pane>
             </right>
         </BorderPane>
@@ -442,7 +612,7 @@
             <WebView fx:id="changeLogWebView" prefHeight="670.0" prefWidth="635.0" />
          </children>
       </Pane>
-      <Pane visible="false" fx:id="updatePane" layoutX="215.0" prefHeight="670.0" prefWidth="635.0" style="-fx-background-color: #1e1e1e; -fx-opacity: 0.6;">
+      <Pane fx:id="updatePane" layoutX="215.0" prefHeight="670.0" prefWidth="635.0" style="-fx-background-color: #1e1e1e; -fx-opacity: 0.6;" visible="false">
          <children>
             <Label fx:id="updateStatusLabel" alignment="CENTER" layoutY="342.0" prefWidth="635.0" text="Güncelleme başlatıldı lütfen indirme devam ederken programı kapatmayınız." textAlignment="CENTER" textFill="WHITE">
                <font>

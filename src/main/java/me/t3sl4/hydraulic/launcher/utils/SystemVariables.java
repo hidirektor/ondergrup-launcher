@@ -9,12 +9,22 @@ public class SystemVariables {
     public static String ASSET_URL = "https://api.github.com/repos/hidirektor/ondergrup-hydraulic-tool/releases/latest";
 
     public static String WEB_URL = "https://ondergrup.com";
+    public static String BASE_LOGIN_URL = "https://ondergrup.hidirektor.com.tr/#/login";
     public static String developedBy = "Designed and Coded by\nHalil İbrahim Direktör";
     public static String PORTFOLIO_URL = "https://hidirektor.com.tr";
 
+    public static String loginURLPrefix = "/auth/login";
+    public static String profileInfoURLPrefix = "/user/getProfile";
+    public static String checkLicenseUrlPrefix = "/license/check";
+    public static String activateLicenseUrlPrefix = "/license/activate";
+    public static String downloadPhotoURLPrefix = "/user/downloadProfilePhoto";
+
     public static String mainPath;
+    public static String userAccountsFolderPath;
+    public static String userAccountsDataPath;
     public static String licensePath;
     public static String userDataPath;
+    public static String profilePhotoLocalPath;
     public static String localHydraulicDataPath;
     public static String partListDataPath;
     public static String hydraulicPath;

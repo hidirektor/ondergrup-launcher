@@ -8,6 +8,7 @@ import me.t3sl4.hydraulic.launcher.utils.FileUtil;
 import me.t3sl4.hydraulic.launcher.utils.SceneUtil;
 import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
+import me.t3sl4.hydraulic.launcher.utils.Version.UpdateCheckerService;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,8 +18,6 @@ public class Main extends Application {
     List<Screen> screens = Screen.getScreens();
 
     public static Screen defaultScreen;
-
-    public static String license;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -31,12 +30,23 @@ public class Main extends Application {
 
         defaultScreen = screens.get(0);
         SceneUtil.openMainScreen(screens.get(0));
+
+        UpdateCheckerService updateService = new UpdateCheckerService();
+        updateService.start();
+
+        System.out.println("Önder Grup Updater servisi başlatıldı.");
+
+        try {
+            Thread.currentThread().join();
+        } catch (InterruptedException e) {
+            System.err.println("Servis durduruldu.");
+        }
     }
 
     private void checkVersionFromPrefs() {
         GeneralUtil.prefs = Preferences.userRoot().node(this.getClass().getName());
 
-        String versionKey = "onderGrup_hydraulic_versionNumber";
+        String versionKey = "onderGrup_hydraulic_launcher_versionNumber";
         String currentVersion = SystemVariables.CURRENT_VERSION;
         String savedVersion = GeneralUtil.prefs.get(versionKey, null);
 
