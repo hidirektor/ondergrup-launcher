@@ -2,7 +2,7 @@
 
 <br />
 <div align="center">
-  <a href="https://github.com/hidirektor/OnderGrup-Hydraulic-Tool">
+  <a href="https://github.com/hidirektor/ondergrup-launcher">
     <img src="readme/onderGrupMain.png" alt="Logo" width="320" height="80">
   </a>
 
@@ -12,9 +12,9 @@
     Önder Launcher is custom solution for desktop products that has been developed for Önder Grup.
     <br />
     <br />
-    <a href="https://github.com/hidirektor/OnderGrup-Hydraulic-Tool/issues">Report Bug</a>
+    <a href="mailto:hidirektor@gmail.com">Report Bug</a>
     ·
-    <a href="https://github.com/hidirektor/OnderGrup-Hydraulic-Tool/issues">Request Feature</a>
+    <a href="mailto:hidirektor@gmail.com">Request Feature</a>
   </p>
 </div>
 
