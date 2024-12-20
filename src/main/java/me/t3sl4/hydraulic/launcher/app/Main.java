@@ -35,25 +35,31 @@ public class Main extends Application {
         updateService.start();
 
         System.out.println("Önder Grup Updater servisi başlatıldı.");
-
-        try {
-            Thread.currentThread().join();
-        } catch (InterruptedException e) {
-            System.err.println("Servis durduruldu.");
-        }
     }
 
     private void checkVersionFromPrefs() {
-        GeneralUtil.prefs = Preferences.userRoot().node(this.getClass().getName());
+        GeneralUtil.prefs = Preferences.userRoot().node("onderGrupUpdater");
 
-        String versionKey = "onderGrup_hydraulic_launcher_versionNumber";
+        // Launcher için key
+        String launcherVersionKey = "launcher_version";
+        // HydraulicTool için key
+        String hydraulicVersionKey = "hydraulic_version";
+
+        // Mevcut sürüm (Launcher için)
         String currentVersion = SystemVariables.CURRENT_VERSION;
-        String savedVersion = GeneralUtil.prefs.get(versionKey, null);
 
-        if (savedVersion == null || !savedVersion.equals(currentVersion)) {
-            GeneralUtil.prefs.put(versionKey, currentVersion);
-            System.out.println("Version updated in preferences: " + currentVersion);
+        // Kaydedilmiş sürümleri oku
+        String savedLauncherVersion = GeneralUtil.prefs.get(launcherVersionKey, null);
+        String savedHydraulicVersion = GeneralUtil.prefs.get(hydraulicVersionKey, "unknown");
+
+        // Launcher sürümünü kontrol et ve güncelle
+        if (savedLauncherVersion == null || !savedLauncherVersion.equals(currentVersion)) {
+            GeneralUtil.prefs.put(launcherVersionKey, currentVersion);
+            savedLauncherVersion = GeneralUtil.prefs.get(launcherVersionKey, null);
         }
+
+        // HydraulicTool sürümünü logla
+        System.out.println("Launcher sürümü: " + savedLauncherVersion);
     }
 
     public static void main(String[] args) {
