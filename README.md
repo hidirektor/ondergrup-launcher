@@ -90,6 +90,8 @@ There's two steps to you must follow.
 - [x] Update Checker for Önder Grup Hydraulic Tool
 - [x] Auto Update for Önder Grup Hydraulic Tool
 - [x] Embed tray on closed state.
+- [x] Main account for critical sub system control section.
+- [x] Shortcut & Auto Start controller.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
