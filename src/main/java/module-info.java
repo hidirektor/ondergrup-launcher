@@ -17,6 +17,7 @@ module me.t3sl4.hydraulic.launcher {
     requires okhttp3;
     requires org.yaml.snakeyaml;
     requires java.net.http;
+    requires mslinks;
 
     opens me.t3sl4.hydraulic.launcher to javafx.fxml;
     exports me.t3sl4.hydraulic.launcher;

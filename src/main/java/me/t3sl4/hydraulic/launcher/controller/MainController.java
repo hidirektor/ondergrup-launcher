@@ -31,7 +31,9 @@ import me.t3sl4.hydraulic.launcher.utils.HTTP.HttpUtil;
 import me.t3sl4.hydraulic.launcher.utils.Model.User;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
 import me.t3sl4.hydraulic.launcher.utils.Version.UpdateCheckerService;
+import mslinks.ShellLink;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -192,6 +194,79 @@ public class MainController implements Initializable {
     @FXML
     public void launcherSettings() {
         paneSwitch(7);
+
+        try {
+            // Masaüstü ve Başlangıç yolları
+            File home = FileSystemView.getFileSystemView().getHomeDirectory();
+            String desktopPath = home.getAbsolutePath();
+            String startupPath = System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
+
+            // Dosya kontrolleri
+            onderLauncherShortcutCheck.setSelected(new File(desktopPath + "\\windows_Launcher.exe.lnk").exists());
+            onderLauncherAutoStartCheck.setSelected(new File(startupPath + "\\windows_Launcher.exe.lnk").exists());
+            hydraulicToolShortcutCheck.setSelected(new File(desktopPath + "\\windows_Hydraulic.exe.lnk").exists());
+            hydraulicToolAutoStartCheck.setSelected(new File(startupPath + "\\windows_Hydraulic.exe.lnk").exists());
+
+            // CheckBox listener ekle
+            setupListeners();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setupListeners() {
+        onderLauncherShortcutCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            try {
+                String fileName = "windows_Launcher";
+                if (newVal) {
+                    createDesktopShortcut(fileName + ".exe", SystemVariables.mainPath + "\\" + fileName + ".exe", SystemVariables.mainPath);
+                } else {
+                    deleteShortcut(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\" + fileName + ".exe" + ".lnk");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        onderLauncherAutoStartCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            try {
+                String fileName = "windows_Launcher";
+                if (newVal) {
+                    addToStartup(fileName + ".exe", SystemVariables.mainPath + "\\" + fileName + ".exe", SystemVariables.mainPath);
+                } else {
+                    deleteShortcut(System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\" + fileName + ".exe" + ".lnk");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        hydraulicToolShortcutCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            try {
+                String fileName = "windows_Hydraulic";
+                if (newVal) {
+                    createDesktopShortcut(fileName + ".exe", SystemVariables.mainPath + "\\" + fileName + ".exe", SystemVariables.mainPath);
+                } else {
+                    deleteShortcut(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\" + fileName + ".exe" + ".lnk");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        hydraulicToolAutoStartCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            try {
+                String fileName = "windows_Hydraulic";
+                if (newVal) {
+                    addToStartup(fileName + ".exe", SystemVariables.mainPath + "\\" + fileName + ".exe", SystemVariables.mainPath);
+                } else {
+                    deleteShortcut(System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\" + fileName + ".exe" + ".lnk");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @FXML
@@ -567,6 +642,66 @@ public class MainController implements Initializable {
             accessTokenLabel.setVisible(false);
             passwordLabel.setVisible(false);
             licenseLabel.setVisible(false);
+        }
+    }
+
+    public static void createDesktopShortcut(String fileName, String targetPath, String workingDirectory) throws IOException {
+        // Masaüstü dizinini al
+        File home = FileSystemView.getFileSystemView().getHomeDirectory();
+        String desktopPath = home.getAbsolutePath();
+        File desktopDir = new File(desktopPath);
+
+        // Masaüstü dizinini kontrol et ve gerekirse oluştur
+        if (!desktopDir.exists() && !desktopDir.mkdirs()) {
+            throw new IOException("Masaüstü dizini oluşturulamadı: " + desktopPath);
+        }
+
+        String shortcutPath = desktopPath + "\\" + fileName + ".lnk";
+
+        // Kısayolu oluştur
+        ShellLink sl = new ShellLink()
+                .setTarget(targetPath)
+                .setWorkingDir(workingDirectory)
+                .setIconLocation(targetPath); // İkon olarak aynı dosya ayarlanıyor
+        sl.getHeader().setIconIndex(0); // İkonun dizin numarası
+
+        // Kısayolu kaydet
+        sl.saveTo(shortcutPath);
+        System.out.println("Kısayol oluşturuldu: " + shortcutPath);
+    }
+
+    public static void addToStartup(String fileName, String targetPath, String workingDirectory) throws IOException {
+        // Windows başlangıç klasörünü al
+        String startupPath = System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
+        File startupDir = new File(startupPath);
+
+        // Başlangıç dizinini kontrol et ve gerekirse oluştur
+        if (!startupDir.exists() && !startupDir.mkdirs()) {
+            throw new IOException("Başlangıç dizini oluşturulamadı: " + startupPath);
+        }
+
+        String shortcutPath = startupPath + "\\" + fileName + ".lnk";
+
+        // Kısayolu oluştur
+        ShellLink sl = new ShellLink()
+                .setTarget(targetPath)
+                .setWorkingDir(workingDirectory)
+                .setIconLocation(targetPath); // İkon olarak aynı dosya ayarlanıyor
+        sl.getHeader().setIconIndex(0); // İkonun dizin numarası
+
+        // Kısayolu kaydet
+        sl.saveTo(shortcutPath);
+        System.out.println("Başlangıç klasörüne eklendi: " + shortcutPath);
+    }
+
+    private void deleteShortcut(String path) throws IOException {
+        File shortcut = new File(path);
+        if (shortcut.exists()) {
+            if (!shortcut.delete()) {
+                throw new IOException("Kısayol silinemedi: " + path);
+            }
+        } else {
+            System.out.println("Kısayol bulunamadı: " + path);
         }
     }
 }
