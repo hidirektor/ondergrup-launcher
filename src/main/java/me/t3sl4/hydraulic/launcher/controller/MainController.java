@@ -34,10 +34,8 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class MainController implements Initializable {
 
@@ -437,6 +435,18 @@ public class MainController implements Initializable {
     public void deletedAccounts() {
         populateUIWithCachedData(savedUserAccounts, "deleted");
         setupSearchBar(accountSearchBar, savedUserAccounts, "deleted");
+    }
+
+    @FXML
+    public void deleteAccount() {
+        selectedUser.setDeleted(true);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, 20);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = sdf.format(calendar.getTime());
+        selectedUser.setDeletionDate(formattedDate);
+
+        FileUtil.deleteUserInFile(selectedUser);
     }
 
     private void paneSwitch(int paneType) {

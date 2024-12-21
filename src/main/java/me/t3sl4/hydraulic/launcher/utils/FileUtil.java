@@ -1,19 +1,18 @@
 package me.t3sl4.hydraulic.launcher.utils;
 
-import javafx.application.Platform;
 import me.t3sl4.hydraulic.launcher.utils.Model.User;
-import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
-import java.util.stream.Stream;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.LoaderOptions;
-import org.yaml.snakeyaml.Yaml;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FileUtil {
     public static void criticalFileSystem() throws IOException {
@@ -202,6 +201,40 @@ public class FileUtil {
                     Map<String, Object> accountData = entry.getValue();
                     if (accountData.get("userName").equals(userData.getUserName())) {
                         accountData.put("isFavourite", String.valueOf(userData.isFavourite()));
+                        break;
+                    }
+                }
+
+                DumperOptions options = new DumperOptions();
+                options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+                options.setDefaultScalarStyle(DumperOptions.ScalarStyle.DOUBLE_QUOTED);
+
+                try (FileWriter writer = new FileWriter(yamlFile)) {
+                    yaml = new Yaml(options);
+                    yaml.dump(data, writer);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error updating user favourite status: " + e.getMessage());
+        }
+    }
+
+    public static void deleteUserInFile(User userData) {
+        File yamlFile = new File(SystemVariables.userAccountsDataPath);
+        LoaderOptions loaderOptions = new LoaderOptions();
+        Yaml yaml = new Yaml(loaderOptions);
+        Map<String, Object> data;
+
+        try (FileReader reader = new FileReader(yamlFile)) {
+            data = yaml.load(reader);
+            if (data != null && data.containsKey("user_accounts")) {
+                Map<String, Map<String, Object>> userAccountsMap = (Map<String, Map<String, Object>>) data.get("user_accounts");
+
+                for (Map.Entry<String, Map<String, Object>> entry : userAccountsMap.entrySet()) {
+                    Map<String, Object> accountData = entry.getValue();
+                    if (accountData.get("userName").equals(userData.getUserName())) {
+                        accountData.put("isDeleted", String.valueOf(userData.isFavourite()));
+                        accountData.put("deletionDate", userData.getDeletionDate());
                         break;
                     }
                 }

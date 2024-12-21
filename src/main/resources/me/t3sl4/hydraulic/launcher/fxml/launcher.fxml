@@ -342,7 +342,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="accountDeleteButton" mnemonicParsing="false" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Sil" textFill="WHITE">
+                        <Button fx:id="accountDeleteButton" mnemonicParsing="false" onAction="#deleteAccount" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Sil" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
