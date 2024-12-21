@@ -10,10 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -77,7 +74,13 @@ public class MainController implements Initializable {
     private Button accountEditButton, accountDeleteButton, accountLoginButton;
 
     @FXML
-    private TextField userNameTextField, passwordTextField, licenseKeyTextField;
+    private TextField userNameTextField, licenseKeyTextField;
+
+    @FXML
+    private PasswordField passwordTextField;
+
+    @FXML
+    private TextField visiblePasswordTextField;
 
     @FXML
     private Pane createAccountPane, customDataPane;
@@ -106,6 +109,7 @@ public class MainController implements Initializable {
     //Ekran büyütüp küçültme
     private boolean stageMaximized = false;
     private boolean isHidden = true;
+    private String girilenSifre = "";
 
     //Kaydedilen user Accountslar
     private List<User> savedUserAccounts = new ArrayList<>();
@@ -286,7 +290,11 @@ public class MainController implements Initializable {
         createAccountPane.toFront();
         userNameTextField.clear();
         passwordTextField.clear();
+        visiblePasswordTextField.clear();
         licenseKeyTextField.clear();
+
+        passwordTextField.setPrefWidth(290.0);
+        visiblePasswordTextField.setPrefWidth(0);
 
         accountLoginButton.setOnAction(_ -> {
             String username = userNameTextField.getText();
@@ -308,19 +316,11 @@ public class MainController implements Initializable {
             }
         });
 
-        showHidePasswordImageView.setOnMouseClicked(_ -> {
-            if (passwordTextField.isVisible()) {
-                passwordTextField.setText(passwordTextField.getText());
-                passwordTextField.setVisible(false);
-                passwordTextField.setVisible(true);
-                showHidePasswordImageView.setImage(new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/icons/icon_hide_pass.png"))));
-            } else {
-                passwordTextField.setText(passwordTextField.getText());
-                passwordTextField.setVisible(false);
-                passwordTextField.setVisible(true);
-                showHidePasswordImageView.setImage(new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/icons/icon_show_pass.png"))));
-            }
+        passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            girilenSifre = newValue;
         });
+
+        showHidePasswordImageView.setOnMouseClicked(_ -> togglePasswordVisibility());
     }
 
     @FXML
@@ -477,6 +477,27 @@ public class MainController implements Initializable {
         for (ImageView imageView : imageViews) {
             imageView.setOnMouseEntered(event -> imageView.setEffect(darkenEffect));
             imageView.setOnMouseExited(event -> imageView.setEffect(null));
+        }
+    }
+
+    private void togglePasswordVisibility() {
+        if (passwordTextField.isVisible()) {
+            passwordTextField.setManaged(false);
+            passwordTextField.setVisible(false);
+            visiblePasswordTextField.setManaged(true);
+            visiblePasswordTextField.setVisible(true);
+            visiblePasswordTextField.setPrefWidth(290.0);
+            passwordTextField.setPrefWidth(0);
+            visiblePasswordTextField.setText(girilenSifre);
+            showHidePasswordImageView.setImage(new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/icons/icon_hide_pass.png"))));
+        } else {
+            passwordTextField.setManaged(true);
+            passwordTextField.setVisible(true);
+            visiblePasswordTextField.setManaged(false);
+            visiblePasswordTextField.setVisible(false);
+            visiblePasswordTextField.setPrefWidth(0);
+            passwordTextField.setPrefWidth(290.0);
+            showHidePasswordImageView.setImage(new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/icons/icon_show_pass.png"))));
         }
     }
 
