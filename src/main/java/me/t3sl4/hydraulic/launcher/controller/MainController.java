@@ -10,14 +10,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -29,10 +31,8 @@ import me.t3sl4.hydraulic.launcher.utils.HTTP.HttpUtil;
 import me.t3sl4.hydraulic.launcher.utils.Model.User;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
 import me.t3sl4.hydraulic.launcher.utils.Version.UpdateCheckerService;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -81,6 +81,9 @@ public class MainController implements Initializable {
     private Pane createAccountPane, customDataPane;
 
     @FXML
+    private Pane settingsPane;
+
+    @FXML
     private Label requestResponse, accountAddUserNameLabel, accountAddEmailLabel, loginURL;
 
     @FXML
@@ -94,6 +97,9 @@ public class MainController implements Initializable {
 
     @FXML
     private ImageView copyLicenseButton, copyPasswordButton;
+
+    @FXML
+    private CheckBox onderLauncherShortcutCheck, onderLauncherAutoStartCheck, hydraulicToolShortcutCheck, hydraulicToolAutoStartCheck;
 
     //Ekran büyütüp küçültme
     private boolean stageMaximized = false;
@@ -181,6 +187,11 @@ public class MainController implements Initializable {
             e.printStackTrace();
             System.err.println("Failed to execute hydraulic file: " + hydraulicPath);
         }
+    }
+
+    @FXML
+    public void launcherSettings() {
+        paneSwitch(7);
     }
 
     @FXML
@@ -358,6 +369,8 @@ public class MainController implements Initializable {
         updatePane.toBack();
         changeLogPane.setVisible(false);
         changeLogPane.toBack();
+        settingsPane.setVisible(false);
+        settingsPane.toBack();
         switch (paneType) {
             case 1: //Aktif Lisanslar & Hesaplar
                 break;
@@ -374,6 +387,10 @@ public class MainController implements Initializable {
             case 6: //ChangeLog
                 changeLogPane.setVisible(true);
                 changeLogPane.toFront();
+                break;
+            case 7: //Settings
+                settingsPane.setVisible(true);
+                settingsPane.toFront();
                 break;
         }
     }
