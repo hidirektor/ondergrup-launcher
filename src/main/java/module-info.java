@@ -8,7 +8,6 @@ module me.t3sl4.hydraulic.launcher {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.prefs;
     requires java.logging;

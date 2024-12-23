@@ -294,7 +294,7 @@ public class MainController implements Initializable {
         passwordTextField.setPrefWidth(290.0);
         visiblePasswordTextField.setPrefWidth(0);
 
-        accountLoginButton.setOnAction(_ -> {
+        accountLoginButton.setOnAction(event -> {
             String username = userNameTextField.getText();
             String password = passwordTextField.getText();
             String licenseKey = licenseKeyTextField.getText();
@@ -318,7 +318,7 @@ public class MainController implements Initializable {
             girilenSifre = newValue;
         });
 
-        showHidePasswordImageView.setOnMouseClicked(_ -> togglePasswordVisibility());
+        showHidePasswordImageView.setOnMouseClicked(event -> togglePasswordVisibility());
     }
 
     @FXML
@@ -540,13 +540,13 @@ public class MainController implements Initializable {
 
                 HttpUtil.setProfilePhoto(userData.getUserName(), profilePhoto);
 
-                node.setOnMouseClicked(_ -> {
+                node.setOnMouseClicked(event -> {
                     selectedUser = userData;
                     initializeCustomUserData(selectedUser);
                 });
 
-                node.setOnMouseEntered(_ -> node.setStyle("-fx-background-color : #6393E7"));
-                node.setOnMouseExited(_ -> node.setStyle("-fx-background-color : transparent"));
+                node.setOnMouseEntered(event -> node.setStyle("-fx-background-color : #6393E7"));
+                node.setOnMouseExited(event -> node.setStyle("-fx-background-color : transparent"));
 
                 savedUsersVBox.getChildren().add(node);
 
@@ -590,7 +590,7 @@ public class MainController implements Initializable {
 
         customFavouriteButton.setImage(favouriteIcon);
 
-        customFavouriteButton.setOnMouseClicked(_ -> {
+        customFavouriteButton.setOnMouseClicked(event -> {
             boolean newFavouriteStatus = !selectedUser.isFavourite();
             selectedUser.setFavourite(newFavouriteStatus);
 
@@ -604,7 +604,7 @@ public class MainController implements Initializable {
             System.out.println("User favourite status updated: " + selectedUser);
         });
 
-        copyLicenseButton.setOnMouseClicked(_ -> {
+        copyLicenseButton.setOnMouseClicked(event -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent content = new ClipboardContent();
             content.putString(selectedUser.getLicenseKey());
@@ -612,7 +612,7 @@ public class MainController implements Initializable {
             System.out.println("License key copied to clipboard: " + selectedUser.getLicenseKey());
         });
 
-        copyPasswordButton.setOnMouseClicked(_ -> {
+        copyPasswordButton.setOnMouseClicked(event -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent content = new ClipboardContent();
             content.putString(selectedUser.getPassword());
@@ -620,7 +620,7 @@ public class MainController implements Initializable {
             System.out.println("Password copied to clipboard: " + selectedUser.getPassword());
         });
 
-        customShowHidePass.setOnMouseClicked(_ -> {
+        customShowHidePass.setOnMouseClicked(event -> {
             if (isHidden) {
                 isHidden = false;
                 passwordLabel.setText(selectedUser.getPassword());
@@ -632,13 +632,13 @@ public class MainController implements Initializable {
             }
         });
 
-        loginURL.setOnMouseClicked(_ -> GeneralUtil.openURL(SystemVariables.BASE_LOGIN_URL));
+        loginURL.setOnMouseClicked(event -> GeneralUtil.openURL(SystemVariables.BASE_LOGIN_URL));
     }
 
     private void setupSearchBar(TextField accountSearchBar, List<User> savedUserAccounts, String filterCriteria) {
         final PauseTransition pause = new PauseTransition(Duration.millis(500));
         accountSearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-            pause.setOnFinished(_ -> {
+            pause.setOnFinished(event -> {
                 String searchText = newValue.toLowerCase();
                 List<User> filteredUsers = savedUserAccounts.stream()
                         .filter(user -> {
