@@ -1,30 +1,26 @@
 package me.t3sl4.hydraulic.launcher.utils;
 
 import javafx.application.Platform;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import me.t3sl4.hydraulic.launcher.Launcher;
-import me.t3sl4.hydraulic.launcher.app.Main;
-import me.t3sl4.hydraulic.launcher.controller.MainController;
-
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.io.*;
-import java.net.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import me.t3sl4.hydraulic.launcher.Launcher;
+import me.t3sl4.hydraulic.launcher.controller.MainController;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Enumeration;
 import java.util.Objects;
+import java.util.Scanner;
+import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 public class GeneralUtil {
 
@@ -126,8 +122,14 @@ public class GeneralUtil {
     }
 
     public static void systemShutdown() {
-        Platform.exit();
+        try {
+            Path lockFilePath = Path.of(System.getProperty("user.home"), ".onder_grup_launcher.pid");
+            Files.deleteIfExists(lockFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        Platform.exit();
         System.exit(0);
     }
 

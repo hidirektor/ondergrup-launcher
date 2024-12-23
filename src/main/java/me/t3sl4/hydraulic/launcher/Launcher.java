@@ -1,7 +1,6 @@
 package me.t3sl4.hydraulic.launcher;
 
 import me.t3sl4.hydraulic.launcher.app.Main;
-import me.t3sl4.hydraulic.launcher.utils.Version.UpdateCheckerService;
 
 public class Launcher {
     public static void main(String[] args) {
