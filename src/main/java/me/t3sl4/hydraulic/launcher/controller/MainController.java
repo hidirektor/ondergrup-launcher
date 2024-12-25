@@ -17,8 +17,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -112,6 +114,9 @@ public class MainController implements Initializable {
     @FXML
     private ProgressBar downloadProgress;
 
+    @FXML
+    private ImageView changeLogLauncherImageView, changeLogHydraulicImageView;
+
     //Ekran büyütüp küçültme
     private boolean stageMaximized = false;
     private boolean isHidden = true;
@@ -123,6 +128,9 @@ public class MainController implements Initializable {
     //Tablodan seçilen kullanıcı
     private User selectedUser;
 
+    private Image hydraulicWebImage = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/images/hydraulic-logo.png")), 16, 16, true, true);
+    private Image launcherWebImage = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/images/logo.png")), 16, 16, true, true);
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
@@ -131,12 +139,46 @@ public class MainController implements Initializable {
             // Program büyültme, küçültme ve kapatma için hover efekti
             addHoverEffect(closeIcon, minimizeIcon, expandIcon);
 
+            changeLogLauncherImageView.setImage(launcherWebImage);
+            changeLogHydraulicImageView.setImage(hydraulicWebImage);
+
+            changeLogWebView.setPrefSize(635.0, 622.0);
+            changeLogWebView.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+            changeLogWebView.setContextMenuEnabled(false);
+
+            Rectangle clip = new Rectangle(635.0, 622.0);
+            clip.setArcWidth(32.0);
+            clip.setArcHeight(32.0);
+            changeLogWebView.setClip(clip);
+
+            changeLogWebView.getEngine().setUserStyleSheetLocation(Launcher.class.getResource("styling/webview.css").toExternalForm());
+
             changeLogWebView.getEngine().load("https://github.com/hidirektor/ondergrup-hydraulic-tool/releases");
+
+            changeLogWebView.addEventFilter(ScrollEvent.SCROLL, event -> {
+                changeLogWebView.getEngine().executeScript("window.scrollBy(0, " + event.getDeltaY() + ")");
+                event.consume();
+            });
         });
 
         FileUtil.readUserAccountData(savedUserAccounts);
         populateUIWithCachedData(savedUserAccounts, null);
         setupSearchBar(accountSearchBar, savedUserAccounts);
+    }
+
+    @FXML
+    public void changeLogHydraulic() {
+        changeLogWebView.getEngine().load("https://github.com/hidirektor/ondergrup-hydraulic-tool/releases");
+    }
+
+    @FXML
+    public void changeLogLauncher() {
+        changeLogWebView.getEngine().load("https://github.com/hidirektor/ondergrup-launcher/releases");
+    }
+
+    @FXML
+    public void changeLogUpdater() {
+        changeLogWebView.getEngine().load("https://github.com/hidirektor/ondergrup-updater-service/releases");
     }
 
     @FXML

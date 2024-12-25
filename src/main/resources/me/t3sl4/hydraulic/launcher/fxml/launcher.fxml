@@ -611,9 +611,40 @@
                </children></Pane>
             </right>
         </BorderPane>
-      <Pane fx:id="changeLogPane" layoutX="215.0" prefHeight="670.0" prefWidth="635.0" visible="false">
+      <Pane fx:id="changeLogPane" layoutX="215.0" prefHeight="670.0" prefWidth="635.0" style="-fx-background-color: #1E1E1E;" visible="false">
          <children>
-            <WebView fx:id="changeLogWebView" prefHeight="670.0" prefWidth="635.0" />
+            <WebView fx:id="changeLogWebView" cache="true" layoutY="48.0" prefHeight="622.0" prefWidth="635.0" />
+            <HBox alignment="CENTER" prefHeight="48.0" prefWidth="635.0" spacing="15.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#changeLogUpdater" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Updater Service Changelog" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../assets/icons/icon_update.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#changeLogLauncher" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Launcher Changelog" textFill="WHITE">
+                     <graphic>
+                        <ImageView fx:id="changeLogLauncherImageView" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../assets/images/logo.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#changeLogHydraulic" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Hydraulic Changelog" textFill="WHITE">
+                     <graphic>
+                        <ImageView fx:id="changeLogHydraulicImageView" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../assets/images/hydraulic-logo.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </Pane>
       <Pane fx:id="updatePane" layoutX="215.0" prefHeight="670.0" prefWidth="635.0" style="-fx-background-color: rgba(30, 30, 30, 0.5); -fx-opacity: 1.0;" visible="false">
