@@ -29,7 +29,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        GeneralUtil.prefs = Preferences.userRoot().node(this.getClass().getName());
+        GeneralUtil.prefs = Preferences.userRoot().node("onderGrupUpdater");
         FileUtil.criticalFileSystem();
 
         if (!checkSingleInstance()) {
@@ -53,8 +53,6 @@ public class Main extends Application {
     }
 
     private void checkVersionFromPrefs() {
-        GeneralUtil.prefs = Preferences.userRoot().node("onderGrupUpdater");
-
         String launcherVersionKey = "launcher_version";
         String hydraulicVersionKey = "hydraulic_version";
 

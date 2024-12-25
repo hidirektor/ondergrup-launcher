@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
@@ -29,10 +30,14 @@ import me.t3sl4.hydraulic.launcher.utils.Model.User;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
 import me.t3sl4.hydraulic.launcher.utils.Version.UpdateCheckerService;
 import mslinks.ShellLink;
+import org.json.JSONObject;
 
 import javax.swing.filechooser.FileSystemView;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -57,10 +62,10 @@ public class MainController implements Initializable {
     private WebView changeLogWebView;
 
     @FXML
-    private ImageView progressIndicator;
+    private ImageView progressIndicator, progressIndicatorDownload;
 
     @FXML
-    private Label updateStatusLabel;
+    private Label updateStatusLabel, updateStatusLabelDownload;
     
     @FXML
     private VBox savedUsersVBox;
@@ -84,7 +89,7 @@ public class MainController implements Initializable {
     private Pane createAccountPane, customDataPane;
 
     @FXML
-    private Pane settingsPane;
+    private Pane settingsPane, downloadPane;
 
     @FXML
     private Label requestResponse, accountAddUserNameLabel, accountAddEmailLabel, loginURL;
@@ -103,6 +108,9 @@ public class MainController implements Initializable {
 
     @FXML
     private CheckBox onderLauncherShortcutCheck, onderLauncherAutoStartCheck, hydraulicToolShortcutCheck, hydraulicToolAutoStartCheck;
+
+    @FXML
+    private ProgressBar downloadProgress;
 
     //Ekran büyütüp küçültme
     private boolean stageMaximized = false;
@@ -274,7 +282,41 @@ public class MainController implements Initializable {
     @FXML
     public void checkForUpdates() {
         paneSwitch(5);
-        handleDownload();
+
+        progressIndicator.setVisible(true);
+        progressIndicator.setStyle("-fx-pref-width: 100; -fx-pref-height: 100;");
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(1.0);
+        progressIndicator.setEffect(colorAdjust);
+        progressIndicator.setCache(true);
+        progressIndicator.setCacheHint(CacheHint.SPEED);
+
+        Task<Void> updateCheckTask = new Task<>() {
+            @Override
+            protected Void call() {
+                try {
+                    String hydraulicVersionKey = "hydraulic_version";
+                    String currentVersion = GeneralUtil.prefs.get(hydraulicVersionKey, "unknown");
+
+                    String latestVersion = fetchLatestVersionFromGitHub();
+
+                    if (latestVersion != null && !latestVersion.equals(currentVersion)) {
+                        Platform.runLater(() -> updateStatusLabel.setText("Yeni sürüm mevcut: " + latestVersion));
+                    } else {
+                        Platform.runLater(() -> updateStatusLabel.setText("Güncel sürümdesiniz."));
+                    }
+
+                } catch (Exception e) {
+                    Platform.runLater(() -> updateStatusLabel.setText("Güncelleme kontrolü sırasında hata oluştu."));
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        };
+
+        Thread updateCheckThread = new Thread(updateCheckTask);
+        updateCheckThread.setDaemon(true);
+        updateCheckThread.start();
     }
 
     @FXML
@@ -343,6 +385,8 @@ public class MainController implements Initializable {
 
     @FXML
     public void handleDownload() {
+        paneSwitch(4);
+
         // Otomatik indirme yolu
         File selectedDirectory = new File(SystemVariables.downloadPath);
 
@@ -369,11 +413,15 @@ public class MainController implements Initializable {
         }
 
         // ProgressIndicator ekle
-        progressIndicator.setVisible(true);
-        progressIndicator.setStyle("-fx-pref-width: 100; -fx-pref-height: 100;");
+        progressIndicatorDownload.setVisible(true);
+        progressIndicatorDownload.setStyle("-fx-pref-width: 100; -fx-pref-height: 100;");
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setBrightness(1.0);
-        progressIndicator.setEffect(colorAdjust);
+        progressIndicatorDownload.setEffect(colorAdjust);
+        progressIndicatorDownload.setCache(true);
+        progressIndicatorDownload.setCacheHint(CacheHint.SPEED);
+
+        downloadProgress.setProgress(0);
 
         Task<Void> downloadTask = new Task<>() {
             @Override
@@ -390,8 +438,8 @@ public class MainController implements Initializable {
             protected void succeeded() {
                 super.succeeded();
                 Platform.runLater(() -> {
-                    updateStatusLabel.setText("İndirme tamamlandı!");
-                    progressIndicator.setVisible(false);
+                    updateStatusLabelDownload.setText("İndirme tamamlandı!");
+                    progressIndicatorDownload.setVisible(false);
                 });
 
                 new Timeline(new KeyFrame(Duration.seconds(2), e -> paneSwitch(1))).play();
@@ -401,8 +449,8 @@ public class MainController implements Initializable {
             protected void failed() {
                 super.failed();
                 Platform.runLater(() -> {
-                    updateStatusLabel.setText("İndirme sırasında bir hata oluştu.");
-                    progressIndicator.setVisible(false);
+                    updateStatusLabelDownload.setText("İndirme sırasında bir hata oluştu.");
+                    progressIndicatorDownload.setVisible(false);
                 });
 
                 new Timeline(new KeyFrame(Duration.seconds(2), e -> paneSwitch(1))).play();
@@ -412,13 +460,15 @@ public class MainController implements Initializable {
             protected void cancelled() {
                 super.cancelled();
                 Platform.runLater(() -> {
-                    updateStatusLabel.setText("İndirme iptal edildi.");
-                    progressIndicator.setVisible(false);
+                    updateStatusLabelDownload.setText("İndirme iptal edildi.");
+                    progressIndicatorDownload.setVisible(false);
                 });
 
                 new Timeline(new KeyFrame(Duration.seconds(2), e -> paneSwitch(1))).play();
             }
         };
+
+        downloadProgress.progressProperty().bind(downloadTask.progressProperty());
 
         Thread downloadThread = new Thread(downloadTask);
         downloadThread.setDaemon(true);
@@ -477,6 +527,8 @@ public class MainController implements Initializable {
         settingsPane.toBack();
         createAccountPane.setVisible(false);
         createAccountPane.toBack();
+        downloadPane.setVisible(false);
+        downloadPane.toBack();
         switch (paneType) {
             case 1: //Aktif Lisanslar & Hesaplar
                 settingsPane.setVisible(false);
@@ -490,7 +542,9 @@ public class MainController implements Initializable {
                 settingsPane.setVisible(false);
                 settingsPane.toBack();
                 break;
-            case 4: //Profil
+            case 4: //Hidroliği İndir
+                downloadPane.setVisible(true);
+                downloadPane.toFront();
                 break;
             case 5: //Check Updates
                 updatePane.setVisible(true);
@@ -736,5 +790,23 @@ public class MainController implements Initializable {
         } else {
             System.out.println("Kısayol bulunamadı: " + path);
         }
+    }
+
+    private String fetchLatestVersionFromGitHub() throws IOException {
+        URL url = new URL("https://api.github.com/repos/hidirektor/ondergrup-hydraulic-tool/releases/latest");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String inputLine;
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        JSONObject jsonResponse = new JSONObject(response.toString());
+        return jsonResponse.getString("tag_name");
     }
 }
