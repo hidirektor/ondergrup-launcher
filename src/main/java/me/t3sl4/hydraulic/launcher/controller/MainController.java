@@ -228,9 +228,12 @@ public class MainController implements Initializable {
     private void setupListeners() {
         onderLauncherShortcutCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
             try {
-                String fileName = "windows_Launcher";
+                String fileName = "windows_Updater";
+                String iconName = "windows_Launcher";
+                String iconPath = SystemVariables.mainPath + "\\" + iconName + ".exe";
+                String targetPath = SystemVariables.mainPath + "\\" + fileName + ".jar";
                 if (newVal) {
-                    createDesktopShortcut(fileName + ".exe", SystemVariables.mainPath + "\\" + fileName + ".exe", SystemVariables.mainPath);
+                    createDesktopShortcut(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
                     deleteShortcut(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\" + fileName + ".exe" + ".lnk");
                 }
@@ -241,9 +244,12 @@ public class MainController implements Initializable {
 
         onderLauncherAutoStartCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
             try {
-                String fileName = "windows_Launcher";
+                String fileName = "windows_Updater";
+                String iconName = "windows_Launcher";
+                String iconPath = SystemVariables.mainPath + "\\" + iconName + ".exe";
+                String targetPath = SystemVariables.mainPath + "\\" + fileName + ".jar";
                 if (newVal) {
-                    addToStartup(fileName + ".exe", SystemVariables.mainPath + "\\" + fileName + ".exe", SystemVariables.mainPath);
+                    addToStartup(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
                     deleteShortcut(System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\" + fileName + ".exe" + ".lnk");
                 }
@@ -255,8 +261,10 @@ public class MainController implements Initializable {
         hydraulicToolShortcutCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
             try {
                 String fileName = "windows_Hydraulic";
+                String iconPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
+                String targetPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 if (newVal) {
-                    createDesktopShortcut(fileName + ".exe", SystemVariables.mainPath + "\\" + fileName + ".exe", SystemVariables.mainPath);
+                    createDesktopShortcut(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
                     deleteShortcut(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\" + fileName + ".exe" + ".lnk");
                 }
@@ -268,8 +276,10 @@ public class MainController implements Initializable {
         hydraulicToolAutoStartCheck.selectedProperty().addListener((obs, oldVal, newVal) -> {
             try {
                 String fileName = "windows_Hydraulic";
+                String iconPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
+                String targetPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 if (newVal) {
-                    addToStartup(fileName + ".exe", SystemVariables.mainPath + "\\" + fileName + ".exe", SystemVariables.mainPath);
+                    addToStartup(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
                     deleteShortcut(System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\" + fileName + ".exe" + ".lnk");
                 }
@@ -732,7 +742,7 @@ public class MainController implements Initializable {
         });
     }
 
-    public static void createDesktopShortcut(String fileName, String targetPath, String workingDirectory) throws IOException {
+    public static void createDesktopShortcut(String fileName, String targetPath, String iconPath, String workingDirectory) throws IOException {
         // Masaüstü dizinini al
         File home = FileSystemView.getFileSystemView().getHomeDirectory();
         String desktopPath = home.getAbsolutePath();
@@ -749,7 +759,7 @@ public class MainController implements Initializable {
         ShellLink sl = new ShellLink()
                 .setTarget(targetPath)
                 .setWorkingDir(workingDirectory)
-                .setIconLocation(targetPath); // İkon olarak aynı dosya ayarlanıyor
+                .setIconLocation(iconPath); // İkon olarak aynı dosya ayarlanıyor
         sl.getHeader().setIconIndex(0); // İkonun dizin numarası
 
         // Kısayolu kaydet
@@ -757,7 +767,7 @@ public class MainController implements Initializable {
         System.out.println("Kısayol oluşturuldu: " + shortcutPath);
     }
 
-    public static void addToStartup(String fileName, String targetPath, String workingDirectory) throws IOException {
+    public static void addToStartup(String fileName, String targetPath, String iconPath, String workingDirectory) throws IOException {
         // Windows başlangıç klasörünü al
         String startupPath = System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
         File startupDir = new File(startupPath);
@@ -773,7 +783,7 @@ public class MainController implements Initializable {
         ShellLink sl = new ShellLink()
                 .setTarget(targetPath)
                 .setWorkingDir(workingDirectory)
-                .setIconLocation(targetPath); // İkon olarak aynı dosya ayarlanıyor
+                .setIconLocation(iconPath); // İkon olarak aynı dosya ayarlanıyor
         sl.getHeader().setIconIndex(0); // İkonun dizin numarası
 
         // Kısayolu kaydet
