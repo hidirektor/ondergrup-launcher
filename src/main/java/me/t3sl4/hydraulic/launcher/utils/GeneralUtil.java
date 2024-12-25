@@ -205,33 +205,28 @@ public class GeneralUtil {
                 TrayIcon trayIcon = new TrayIcon(awtImage, "Önder Grup Launcher");
                 trayIcon.setImageAutoSize(true);
 
-                // Create PopupMenu for Tray Icon
                 PopupMenu popup = new PopupMenu();
-                MenuItem exitItem = new MenuItem("Exit");
-                MenuItem expandItem = new MenuItem("Expand Launcher");
+                MenuItem exitItem = new MenuItem("Tamamen Kapat");
+                MenuItem expandItem = new MenuItem("Öne Getir");
 
-                // Exit item action
                 exitItem.addActionListener(e -> {
                     tray.remove(trayIcon);
                     systemShutdown();
                 });
 
-                // Expand item action
                 expandItem.addActionListener(e -> SwingUtilities.invokeLater(() -> Platform.runLater(() -> {
-                    tray.remove(trayIcon); // Remove tray icon
-                    primaryStage.show();   // Show the stage
-                    primaryStage.setIconified(false); // Ensure not minimized
-                    primaryStage.toFront(); // Bring to front
+                    tray.remove(trayIcon);
+                    primaryStage.show();
+                    primaryStage.setIconified(false);
+                    primaryStage.toFront();
                 })));
 
                 popup.add(expandItem);
                 popup.add(exitItem);
                 trayIcon.setPopupMenu(popup);
 
-                // Add the Tray Icon
                 tray.add(trayIcon);
 
-                // Double-click action to restore application
                 trayIcon.addActionListener(e -> SwingUtilities.invokeLater(() -> Platform.runLater(() -> {
                     tray.remove(trayIcon);
                     primaryStage.show();
@@ -239,10 +234,9 @@ public class GeneralUtil {
                     primaryStage.toFront();
                 })));
 
-                // Show a notification when minimized
                 SwingUtilities.invokeLater(() -> Platform.runLater(() -> { trayIcon.displayMessage(
                         "Önder Grup Launcher",
-                        "Program is still running in the background.",
+                        "Program arka planda çalışmaya devam ediyor.",
                         TrayIcon.MessageType.INFO
                 );}));
 
