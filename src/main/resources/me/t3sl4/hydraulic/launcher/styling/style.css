@@ -61,6 +61,7 @@
     -fx-font-family: "CustomRegular";
     -fx-background-color: #404040;
     -fx-text-fill: #FFFFFF;
+    -fx-text-color: #FFFFFF;
     -fx-prompt-text-fill: #9e9e9e;
     -fx-background-radius: 100em;
     -fx-padding: 0 0 0 26px;
@@ -68,6 +69,7 @@
 
 .text-field .content {
     -fx-alignment: center-left;
+    -fx-text-color: #FFFFFF;
 }
 
 .text-field {

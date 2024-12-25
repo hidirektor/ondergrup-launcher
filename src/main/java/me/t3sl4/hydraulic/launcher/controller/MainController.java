@@ -127,8 +127,8 @@ public class MainController implements Initializable {
         });
 
         FileUtil.readUserAccountData(savedUserAccounts);
-        populateUIWithCachedData(savedUserAccounts, "all");
-        setupSearchBar(accountSearchBar, savedUserAccounts, "all");
+        populateUIWithCachedData(savedUserAccounts, null);
+        setupSearchBar(accountSearchBar, savedUserAccounts);
     }
 
     @FXML
@@ -426,15 +426,24 @@ public class MainController implements Initializable {
     }
 
     @FXML
+    public void allAccounts() {
+        populateUIWithCachedData(savedUserAccounts, null);
+        setupSearchBar(accountSearchBar, savedUserAccounts);
+        paneSwitch(1);
+    }
+
+    @FXML
     public void favouritedAccounts() {
         populateUIWithCachedData(savedUserAccounts, "favourite");
-        setupSearchBar(accountSearchBar, savedUserAccounts, "favourite");
+        setupSearchBar(accountSearchBar, savedUserAccounts);
+        paneSwitch(2);
     }
 
     @FXML
     public void deletedAccounts() {
         populateUIWithCachedData(savedUserAccounts, "deleted");
-        setupSearchBar(accountSearchBar, savedUserAccounts, "deleted");
+        setupSearchBar(accountSearchBar, savedUserAccounts);
+        paneSwitch(3);
     }
 
     @FXML
@@ -449,6 +458,11 @@ public class MainController implements Initializable {
         FileUtil.deleteUserInFile(selectedUser);
     }
 
+    @FXML
+    public void hydraulicLicenses() {
+
+    }
+
     private void paneSwitch(int paneType) {
         updatePane.setVisible(false);
         updatePane.toBack();
@@ -458,10 +472,16 @@ public class MainController implements Initializable {
         settingsPane.toBack();
         switch (paneType) {
             case 1: //Aktif Lisanslar & Hesaplar
+                settingsPane.setVisible(false);
+                settingsPane.toBack();
                 break;
             case 2: //Favori Hesaplar
+                settingsPane.setVisible(false);
+                settingsPane.toBack();
                 break;
             case 3: //Silinen Hesaplar
+                settingsPane.setVisible(false);
+                settingsPane.toBack();
                 break;
             case 4: //Profil
                 break;
@@ -517,14 +537,14 @@ public class MainController implements Initializable {
         Node firstNode = null;
 
         for (User userData : savedUserAccounts) {
-            if (filterCriteria.equals("favourite") && (!userData.isFavourite() || userData.isDeleted())) {
-                continue;
-            } else if (filterCriteria.equals("deleted") && !userData.isDeleted()) {
-                continue;
-            } else if (filterCriteria.equals("all")) {
-                // Show all users without further filtering
-            } else if (!filterCriteria.equals("favourite") && !filterCriteria.equals("deleted") && (userData.isFavourite() || userData.isDeleted())) {
-                continue;
+            if(filterCriteria != null) {
+                if(filterCriteria.equals("favourite") && !userData.isFavourite()) {
+                    continue;
+                } else {
+                    if(filterCriteria.equals("deleted") && !userData.isDeleted()) {
+                        continue;
+                    }
+                }
             }
 
             try {
@@ -560,7 +580,8 @@ public class MainController implements Initializable {
         }
 
         if (firstNode != null) {
-            customDataComponentVisualize(true);
+            customDataPane.setVisible(true);
+            customDataPane.toFront();
             firstNode.fireEvent(new javafx.scene.input.MouseEvent(
                     javafx.scene.input.MouseEvent.MOUSE_CLICKED,
                     0, 0, 0, 0,
@@ -568,7 +589,8 @@ public class MainController implements Initializable {
                     true, true, true, true, true, true, true, true, true, true, null
             ));
         } else {
-            customDataComponentVisualize(false);
+            customDataPane.setVisible(false);
+            customDataPane.toBack();
         }
     }
 
@@ -635,45 +657,18 @@ public class MainController implements Initializable {
         loginURL.setOnMouseClicked(event -> GeneralUtil.openURL(SystemVariables.BASE_LOGIN_URL));
     }
 
-    private void setupSearchBar(TextField accountSearchBar, List<User> savedUserAccounts, String filterCriteria) {
+    private void setupSearchBar(TextField accountSearchBar, List<User> savedUserAccounts) {
         final PauseTransition pause = new PauseTransition(Duration.millis(500));
         accountSearchBar.textProperty().addListener((observable, oldValue, newValue) -> {
             pause.setOnFinished(event -> {
                 String searchText = newValue.toLowerCase();
                 List<User> filteredUsers = savedUserAccounts.stream()
-                        .filter(user -> {
-                            boolean matchesSearch = user.getUserName().toLowerCase().contains(searchText) || user.getNameSurname().toLowerCase().contains(searchText);
-                            if (filterCriteria.equals("favourite")) {
-                                return matchesSearch && user.isFavourite() && !user.isDeleted();
-                            } else if (filterCriteria.equals("deleted")) {
-                                return matchesSearch && user.isDeleted();
-                            } else {
-                                return matchesSearch && !user.isFavourite() && !user.isDeleted();
-                            }
-                        })
+                        .filter(user -> user.getUserName().toLowerCase().contains(searchText) || user.getNameSurname().toLowerCase().contains(searchText))
                         .toList();
-                populateUIWithCachedData(filteredUsers, "all");
+                populateUIWithCachedData(filteredUsers, null);
             });
             pause.playFromStart();
         });
-    }
-
-    private void customDataComponentVisualize(boolean isVisual) {
-        if(isVisual) {
-            customImageView.setVisible(true);
-            customNameSurname.setVisible(true);
-            customUserName.setVisible(true);
-            accessTokenLabel.setVisible(true);
-            passwordLabel.setVisible(true);
-            licenseLabel.setVisible(true);
-        } else {
-            customImageView.setVisible(false);
-            customNameSurname.setVisible(false);
-            customUserName.setVisible(false);
-            accessTokenLabel.setVisible(false);
-            passwordLabel.setVisible(false);
-            licenseLabel.setVisible(false);
-        }
     }
 
     public static void createDesktopShortcut(String fileName, String targetPath, String workingDirectory) throws IOException {

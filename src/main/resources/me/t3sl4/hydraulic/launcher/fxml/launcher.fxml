@@ -9,7 +9,7 @@
 <?import javafx.scene.web.WebView?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="670.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="me.t3sl4.hydraulic.launcher.controller.MainController">
     <children>
-        <BorderPane prefHeight="670.0" prefWidth="850.0" style="-fx-border-radius: 2em; -fx-background-color: transparent;">
+        <BorderPane prefHeight="670.0" prefWidth="850.0" style="-fx-border-radius: 2em; -fx-background-color: #1E1E1E;">
             <left>
                 <VBox prefHeight="600.0" prefWidth="215.0" style="-fx-background-color: #282828;" BorderPane.alignment="CENTER">
                     <children>
@@ -41,7 +41,7 @@
                         </ImageView>
                      </children>
                   </HBox>
-                        <Button fx:id="accountsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Aktif Lisanslar &amp; Hesaplar" textFill="WHITE">
+                        <Button fx:id="accountsButton" alignment="BASELINE_LEFT" mnemonicParsing="false" onMouseClicked="#allAccounts" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Tüm Hesaplar" textFill="WHITE">
                             <graphic>
                                 <ImageView fitHeight="24.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -88,6 +88,18 @@
                      <font>
                         <Font name="TextaAlt-Regular" size="12.0" />
                      </font>
+                  </Button>
+                  <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#hydraulicLicenses" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Hydraulic Lisansları" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../assets/icons/icon_license.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                      <font>
+                          <Font name="TextaAlt-Regular" size="12.0" />
+                      </font>
                   </Button>
                   <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Trash" textFill="WHITE" visible="false">
                      <graphic>
@@ -218,18 +230,6 @@
                      <font>
                         <Font name="TextaAlt-Regular" size="12.0" />
                      </font>
-                  </Button>
-                  <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Trash" textFill="WHITE" visible="false">
-                     <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../assets/icons/icon_trash.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                      <font>
-                          <Font name="TextaAlt-Regular" size="12.0" />
-                      </font>
                   </Button>
                   <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Trash" textFill="WHITE" visible="false">
                      <graphic>
