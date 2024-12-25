@@ -333,11 +333,11 @@
                   </Label>
                   <HBox fx:id="accountButtons" alignment="CENTER_RIGHT" prefHeight="45.0" prefWidth="372.0" spacing="10.0">
                      <children>
-                        <Button fx:id="accountEditButton" mnemonicParsing="false" style="-fx-background-color: #292929; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Düzenle" textFill="WHITE">
+                        <Button fx:id="accountSignInAsButton" mnemonicParsing="false" onAction="#signInAs" style="-fx-background-color: #78C57E; -fx-background-radius: 0.5em;" stylesheets="@../styling/style.css" text="Olarak Giriş Yap" textFill="#292929">
                            <graphic>
                               <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../../assets/icons/icon_edit.png" />
+                                    <Image url="@../../../../../assets/icons/icon_sign_in_as.png" />
                                  </image>
                               </ImageView>
                            </graphic>

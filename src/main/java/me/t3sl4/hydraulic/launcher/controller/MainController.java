@@ -69,7 +69,7 @@ public class MainController implements Initializable {
     private TextField accountSearchBar;
 
     @FXML
-    private Button accountEditButton, accountDeleteButton, accountLoginButton;
+    private Button accountLoginButton;
 
     @FXML
     private TextField userNameTextField, licenseKeyTextField;
@@ -463,6 +463,11 @@ public class MainController implements Initializable {
 
     }
 
+    @FXML
+    public void signInAs() {
+
+    }
+
     private void paneSwitch(int paneType) {
         updatePane.setVisible(false);
         updatePane.toBack();
@@ -470,6 +475,8 @@ public class MainController implements Initializable {
         changeLogPane.toBack();
         settingsPane.setVisible(false);
         settingsPane.toBack();
+        createAccountPane.setVisible(false);
+        createAccountPane.toBack();
         switch (paneType) {
             case 1: //Aktif Lisanslar & Hesaplar
                 settingsPane.setVisible(false);

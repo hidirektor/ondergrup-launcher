@@ -1,22 +1,18 @@
 package me.t3sl4.hydraulic.launcher.utils.HTTP;
 
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
+import me.t3sl4.hydraulic.launcher.Launcher;
 import me.t3sl4.hydraulic.launcher.utils.FileUtil;
 import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 
 public class HttpUtil {
     public static void activateLicense(String licenseUrl, String licenseKey, String activatedBy, String accessToken, Runnable onSuccess, Runnable onFailure) throws IOException {
@@ -211,6 +207,10 @@ public class HttpUtil {
 
         if (photoFile.exists()) {
             Image image = new Image(photoFile.toURI().toString());
+            profilePhotoImageView.setImage(image);
+            profilePhotoImageView.setVisible(true);
+        } else {
+            Image image = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/images/logo-sade.png")));
             profilePhotoImageView.setImage(image);
             profilePhotoImageView.setVisible(true);
         }
