@@ -273,7 +273,7 @@ public class MainController implements Initializable {
                 String fileName = "windows_Updater";
                 String iconName = "windows_Launcher";
                 String iconPath = SystemVariables.mainPath + "\\" + iconName + ".exe";
-                String targetPath = SystemVariables.mainPath + "\\" + fileName + ".jar";
+                String targetPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 if (newVal) {
                     createDesktopShortcut(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
@@ -289,7 +289,7 @@ public class MainController implements Initializable {
                 String fileName = "windows_Updater";
                 String iconName = "windows_Launcher";
                 String iconPath = SystemVariables.mainPath + "\\" + iconName + ".exe";
-                String targetPath = SystemVariables.mainPath + "\\" + fileName + ".jar";
+                String targetPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 if (newVal) {
                     addToStartup(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
