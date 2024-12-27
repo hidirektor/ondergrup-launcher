@@ -32,11 +32,13 @@ public class Main extends Application {
         GeneralUtil.prefs = Preferences.userRoot().node("onderGrupUpdater");
         FileUtil.criticalFileSystem();
 
-        if (!checkSingleInstance()) {
-            System.out.println("Program zaten çalışıyor. Odaklanıyor...");
-            focusApp("Önder Grup Launcher " + SystemVariables.getVersion());
-            Platform.exit();
-            return;
+        if(!System.getProperty("os.name").toLowerCase().contains("win")) {
+            if (!checkSingleInstance()) {
+                System.out.println("Program zaten çalışıyor. Odaklanıyor...");
+                focusApp("Önder Grup Launcher " + SystemVariables.getVersion());
+                Platform.exit();
+                return;
+            }
         }
 
         checkVersionFromPrefs();

@@ -14,6 +14,10 @@
   <restartOnCrash>true</restartOnCrash>
   <manifest>C:\Users\hidir\IdeaProjects\ondergrup-launcher\app.manifest</manifest>
   <icon>C:\Users\hidir\IdeaProjects\ondergrup-launcher\src\main\resources\assets\images\logo.ico</icon>
+  <singleInstance>
+    <mutexName>ondergrup_launcher</mutexName>
+    <windowTitle>Önder Launcher</windowTitle>
+  </singleInstance>
   <jre>
     <path>%JAVA_HOME%;%PATH%</path>
     <requiresJdk>true</requiresJdk>
