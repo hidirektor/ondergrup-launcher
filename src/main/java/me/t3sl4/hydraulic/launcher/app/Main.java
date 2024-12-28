@@ -11,7 +11,6 @@ import me.t3sl4.hydraulic.launcher.utils.FileUtil;
 import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.SceneUtil;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
-import me.t3sl4.hydraulic.launcher.utils.Version.UpdateCheckerService;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -47,9 +46,6 @@ public class Main extends Application {
 
         defaultScreen = screens.get(0);
         SceneUtil.openMainScreen(screens.get(0));
-
-        UpdateCheckerService updateService = new UpdateCheckerService();
-        updateService.start();
 
         System.out.println("Önder Grup Updater servisi başlatıldı.");
     }
