@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>C:\Users\hidir\OneDrive\Masaüstü\ondergrup-launcher.jar</jar>
-  <outfile>C:\Users\hidir\OneDrive\Masaüstü\Önder Launcher.exe</outfile>
+  <outfile>C:\Users\hidir\OneDrive\Masaüstü\windows_Launcher.exe</outfile>
   <errTitle>Programın çalışabilmesi için JRE 1.8.0 ve JDK 12.0.2 Gereklidir !</errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
