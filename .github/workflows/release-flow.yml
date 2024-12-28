@@ -1,0 +1,163 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  macos-build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build project (MacOS)
+        run: mvn clean package
+
+      - name: Rename JAR file (MacOS)
+        run: |
+          JAR_FILE=$(find target -name "*.jar" | head -n 1)
+          mv "$JAR_FILE" macos_Launcher.jar
+
+      - name: Upload artifact (MacOS)
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos_Launcher
+          path: macos_Launcher.jar
+
+  unix-build:
+    needs: macos-build
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build project (Ubuntu)
+        run: mvn clean package
+
+      - name: Rename JAR file (Ubuntu)
+        run: |
+          JAR_FILE=$(find target -name "*.jar" | head -n 1)
+          mv "$JAR_FILE" unix_Launcher.jar
+
+      - name: Upload artifact (Ubuntu)
+        uses: actions/upload-artifact@v3
+        with:
+          name: unix_Launcher
+          path: unix_Launcher.jar
+
+  windows-build:
+    needs: unix-build
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build project (Windows)
+        run: mvn clean package
+
+      - name: Rename JAR file (Windows)
+        run: |
+          $JAR_FILE = Get-ChildItem -Path target -Filter *.jar | Select-Object -First 1
+          Move-Item -Path $JAR_FILE.FullName -Destination ondergrup-launcher.jar -Force
+
+      - name: Install Launch4j (Windows)
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/hidirektor/ondergrup-launcher/raw/master/launch4j/launch4j-3.50-win32.exe" -OutFile "launch4j-setup.exe"
+          Start-Process -FilePath "launch4j-setup.exe" -ArgumentList "/S" -NoNewWindow -Wait
+
+      - name: Download Launch4j Config
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/hidirektor/ondergrup-launcher/raw/master/launch4j/ondergrup-launcher-config.xml" -OutFile "ondergrup-launcher-config.xml"
+
+      - name: Check Launch4j Installation (Windows)
+        run: Get-ChildItem -Path "C:\Program Files (x86)\Launch4j"
+
+      - name: Generate EXE using Launch4j (Windows)
+        run: |
+          & "C:\Program Files (x86)\Launch4j\launch4jc.exe" "ondergrup-launcher-config.xml"
+
+      - name: Rename EXE file (Windows)
+        run: mv target/*.exe windows_Launcher.exe
+
+      - name: Upload artifact (Windows)
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows_Launcher
+          path: windows_Launcher.exe
+
+  release:
+    needs: [macos-build, unix-build, windows-build]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine next version
+        id: version
+        run: |
+          CURRENT_VERSION=$(curl -s https://raw.githubusercontent.com/hidirektor/ondergrup-launcher/master/src/main/java/me/t3sl4/hydraulic/launcher/utils/SystemVariables.java | grep 'CURRENT_VERSION' | sed -E 's/.*"v([0-9]+\.[0-9]+\.[0-9]+)".*/\1/')
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+          NEXT_VERSION="$MAJOR.$MINOR.$((PATCH))"
+          echo "version=$NEXT_VERSION" >> $GITHUB_ENV
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Prepare artifacts for release
+        run: |
+          mkdir -p artifacts
+          mv macos_Launcher/macos_Launcher.jar artifacts/
+          mv unix_Launcher/unix_Launcher.jar artifacts/
+          mv windows_Launcher/windows_Launcher.exe artifacts/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ env.version }}
+          name: v${{ env.version }} - Yeniliklerle Dolu Bir Deneyim! 🚀
+          body: |
+            Sevgili kullanıcılarımız,
+            
+              Bu güncelleme ile uygulamamızı daha güçlü, daha hızlı ve daha kullanıcı dostu hale getirdik. İşte sizler için sunduğumuz yenilikler:
+            
+              ✨ Yeni Özellikler:
+              - Performans Artışı: Daha hızlı yüklenme süreleri ve optimize edilmiş işlem kapasitesi.
+              - Yeni Arayüz Tasarımı: Modern ve minimalist tasarım ile daha sezgisel bir kullanıcı deneyimi.
+              - Gelişmiş Bildirim Sistemi: Önemli güncellemelerden anında haberdar olun.
+            
+              🔧 Hata Düzeltmeleri ve İyileştirmeler:
+              - Küçük hatalar giderildi ve genel sistem kararlılığı artırıldı.
+              - Geri bildirimlerinizi dikkate alarak kullanıcı deneyimini geliştirdik.
+            
+              💡 Yeni Eklenen Özellikler:
+              - Karanlık Mod: Göz dostu bir deneyim için karanlık tema seçeneği eklendi.
+              - Çoklu Dil Desteği: Artık birden fazla dilde hizmet sunuyoruz!
+            
+              Bize destek olduğunuz için teşekkür ederiz. Sizlerin geri bildirimleriyle her geçen gün daha iyiye gidiyoruz. Yeni sürümümüzü hemen keşfedin!
+          files: artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.SETUP_TOKEN }}

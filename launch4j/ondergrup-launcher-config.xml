@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\hidir\OneDrive\Masaüstü\ondergrup-launcher.jar</jar>
-  <outfile>C:\Users\hidir\OneDrive\Masaüstü\windows_Launcher.exe</outfile>
+  <jar>ondergrup-launcher.jar</jar>
+  <outfile>windows_Launcher.exe</outfile>
   <errTitle>Programın çalışabilmesi için JRE 1.8.0 ve JDK 12.0.2 Gereklidir !</errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
@@ -12,8 +12,8 @@
   <supportUrl>https://github.com/hidirektor</supportUrl>
   <stayAlive>false</stayAlive>
   <restartOnCrash>true</restartOnCrash>
-  <manifest>C:\Users\hidir\IdeaProjects\ondergrup-launcher\app.manifest</manifest>
-  <icon>C:\Users\hidir\IdeaProjects\ondergrup-launcher\src\main\resources\assets\images\logo.ico</icon>
+  <manifest>app.manifest</manifest>
+  <icon>src\main\resources\assets\images\logo.ico</icon>
   <singleInstance>
     <mutexName>ondergrup_launcher</mutexName>
     <windowTitle>Önder Launcher</windowTitle>
