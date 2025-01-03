@@ -55,6 +55,7 @@ jobs:
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
 
+
   macos-build:
     needs: check-version
     if: needs.check-version.outputs.version_changed == 'true'
@@ -126,7 +127,11 @@ jobs:
           distribution: 'temurin'
 
       - name: Build project (Windows)
-        run: mvn clean package
+        run: |
+          for i in {1..3}; do
+            mvn clean package && break || sleep 10
+          done
+        shell: bash
 
       - name: Rename JAR file (Windows)
         run: |
@@ -151,13 +156,6 @@ jobs:
 
       - name: Rename EXE file (Windows)
         run: mv target/*.exe windows_Launcher.exe
-
-      - name: Install Windows SDK
-        run: choco install windows-sdk-10.0 -y
-
-      - name: Sign EXE file
-        run: |
-          & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /fd SHA256 /a /t http://timestamp.digicert.com /f code-signing-certificate.pfx /p ${{ secrets.CERT_PASSWORD }} windows_Launcher.exe
 
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v3
