@@ -152,6 +152,10 @@ jobs:
       - name: Rename EXE file (Windows)
         run: mv target/*.exe windows_Launcher.exe
 
+      - name: Sign EXE file
+        run: |
+          signtool sign /fd SHA256 /a /t http://timestamp.digicert.com /f code-signing-certificate.pfx /p ${{ secrets.CERT_PASSWORD }} windows_Launcher.exe
+
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v3
         with:
