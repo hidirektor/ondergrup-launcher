@@ -1,7 +1,7 @@
 package me.t3sl4.hydraulic.launcher.utils;
 
 public class SystemVariables {
-    public static final String CURRENT_VERSION = "v1.2.4";
+    public static final String CURRENT_VERSION = "v1.2.5";
 
     public static String BASE_URL = "https://ondergrup.hidirektor.com.tr/api/v2";
     public static String RELEASE_URL = "https://github.com/hidirektor/ondergrup-hydraulic-tool/releases";

@@ -219,24 +219,36 @@ public class MainController implements Initializable {
 
         if (!hydraulicFile.exists()) {
             System.err.println("Hydraulic file not found: " + hydraulicPath);
-            /*
-            Önce hata mesajı ver ardından otomatik indir
-             */
+            handleDownload();
             return;
         }
 
-        // Dosyayı çalıştır
         try {
-            if (hydraulicPath.endsWith(".exe")) {
+            String os = System.getProperty("os.name").toLowerCase();
+
+            if (os.contains("win") && hydraulicPath.endsWith(".exe")) {
                 // Windows için çalıştırma
                 new ProcessBuilder("cmd.exe", "/c", hydraulicPath).start();
-            } else if (hydraulicPath.endsWith(".jar")) {
-                // Unix için çalıştırma
-                new ProcessBuilder("java", "-jar", hydraulicPath).start();
+            } else if (os.contains("nix") || os.contains("nux")) {
+                // Unix/Linux için çalıştırma
+                if (hydraulicPath.endsWith(".jar")) {
+                    new ProcessBuilder("java", "-jar", hydraulicPath).start();
+                } else {
+                    System.err.println("Unsupported file type for Unix/Linux: " + hydraulicPath);
+                }
+            } else if (os.contains("mac")) {
+                // MacOS için çalıştırma
+                if (hydraulicPath.endsWith(".jar")) {
+                    new ProcessBuilder("java", "-jar", hydraulicPath).start();
+                } else {
+                    System.err.println("Unsupported file type for MacOS: " + hydraulicPath);
+                }
             } else {
-                System.err.println("Unsupported file type for: " + hydraulicPath);
+                System.err.println("Unsupported OS or file type for: " + hydraulicPath);
             }
+
             GeneralUtil.minimizeToSystemTray(currentStage);
+
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Failed to execute hydraulic file: " + hydraulicPath);
