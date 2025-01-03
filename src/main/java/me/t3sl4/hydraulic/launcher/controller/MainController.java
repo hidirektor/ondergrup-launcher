@@ -1,8 +1,6 @@
 package me.t3sl4.hydraulic.launcher.controller;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -30,7 +28,8 @@ import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.HTTP.HttpUtil;
 import me.t3sl4.hydraulic.launcher.utils.Model.User;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
-import me.t3sl4.hydraulic.launcher.utils.Version.UpdateCheckerService;
+import me.t3sl4.util.version.DownloadProgressListener;
+import me.t3sl4.util.version.VersionUtil;
 import mslinks.ShellLink;
 import org.json.JSONObject;
 
@@ -212,12 +211,12 @@ public class MainController implements Initializable {
     public void runHydraulic() {
         String hydraulicPath = SystemVariables.hydraulicPath;
 
-        UpdateCheckerService updateService = new UpdateCheckerService();
-        updateService.start();
+        String localVersion = VersionUtil.getLocalVersion(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_HYDRAULIC_KEY);
+        String latestVersion = VersionUtil.getLatestVersion(SystemVariables.REPO_OWNER, SystemVariables.HYDRAULIC_REPO_NAME);
 
         File hydraulicFile = new File(hydraulicPath);
 
-        if (!hydraulicFile.exists()) {
+        if (!hydraulicFile.exists() || localVersion != latestVersion) {
             System.err.println("Hydraulic file not found: " + hydraulicPath);
             handleDownload();
             return;
@@ -487,56 +486,57 @@ public class MainController implements Initializable {
 
         downloadProgress.setProgress(0);
 
+        String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+        String hydraulicFileName;
+
+        if (os.contains("win")) {
+            hydraulicFileName = "windows_Hydraulic.exe";
+        } else if (os.contains("mac")) {
+            hydraulicFileName = "mac_Hydraulic.jar";
+        } else if (os.contains("nix") || os.contains("nux") || os.contains("aix")) {
+            hydraulicFileName = "unix_Hydraulic.jar";
+        } else {
+            throw new UnsupportedOperationException("Bu işletim sistemi desteklenmiyor: " + os);
+        }
+
         Task<Void> downloadTask = new Task<>() {
             @Override
             protected Void call() {
                 try {
-                    GeneralUtil.downloadLatestVersion(selectedDirectory);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    DownloadProgressListener downloadListener = (bytesRead, totalBytes) -> {
+                        Platform.runLater(() -> downloadProgress.setProgress(0));
+
+                        if (totalBytes > 0) {
+                            double progress = (double) bytesRead / totalBytes;
+                            Platform.runLater(() -> downloadProgress.setProgress(progress));
+                        } else {
+                            Platform.runLater(() -> downloadProgress.setProgress(ProgressBar.INDETERMINATE_PROGRESS)); // Indeterminate progress
+                        }
+                    };
+
+                    VersionUtil.downloadLatestWithProgress(
+                            SystemVariables.REPO_OWNER,
+                            SystemVariables.HYDRAULIC_REPO_NAME,
+                            SystemVariables.downloadPath,
+                            hydraulicFileName,
+                            downloadListener
+                    );
+                } catch (Exception e){
+                    System.out.println(e.getMessage());
                 }
                 return null;
             }
-
-            @Override
-            protected void succeeded() {
-                super.succeeded();
-                Platform.runLater(() -> {
-                    updateStatusLabelDownload.setText("İndirme tamamlandı!");
-                    progressIndicatorDownload.setVisible(false);
-                });
-
-                new Timeline(new KeyFrame(Duration.seconds(2), e -> paneSwitch(1))).play();
-            }
-
-            @Override
-            protected void failed() {
-                super.failed();
-                Platform.runLater(() -> {
-                    updateStatusLabelDownload.setText("İndirme sırasında bir hata oluştu.");
-                    progressIndicatorDownload.setVisible(false);
-                });
-
-                new Timeline(new KeyFrame(Duration.seconds(2), e -> paneSwitch(1))).play();
-            }
-
-            @Override
-            protected void cancelled() {
-                super.cancelled();
-                Platform.runLater(() -> {
-                    updateStatusLabelDownload.setText("İndirme iptal edildi.");
-                    progressIndicatorDownload.setVisible(false);
-                });
-
-                new Timeline(new KeyFrame(Duration.seconds(2), e -> paneSwitch(1))).play();
-            }
         };
 
-        downloadProgress.progressProperty().bind(downloadTask.progressProperty());
-
-        Thread downloadThread = new Thread(downloadTask);
-        downloadThread.setDaemon(true);
-        downloadThread.start();
+        try {
+            Thread downloadThread = new Thread(downloadTask);
+            downloadThread.setDaemon(true);
+            downloadThread.start();
+            downloadThread.join();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            e.printStackTrace();
+        }
     }
 
     @FXML
