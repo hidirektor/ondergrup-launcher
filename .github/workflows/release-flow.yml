@@ -152,9 +152,12 @@ jobs:
       - name: Rename EXE file (Windows)
         run: mv target/*.exe windows_Launcher.exe
 
+      - name: Install Windows SDK
+        run: choco install windows-sdk-10.0 -y
+
       - name: Sign EXE file
         run: |
-          signtool sign /fd SHA256 /a /t http://timestamp.digicert.com /f code-signing-certificate.pfx /p ${{ secrets.CERT_PASSWORD }} windows_Launcher.exe
+          & "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /fd SHA256 /a /t http://timestamp.digicert.com /f code-signing-certificate.pfx /p ${{ secrets.CERT_PASSWORD }} windows_Launcher.exe
 
       - name: Upload artifact (Windows)
         uses: actions/upload-artifact@v3
