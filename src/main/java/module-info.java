@@ -9,16 +9,16 @@ module me.t3sl4.hydraulic.launcher {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
-    requires java.prefs;
     requires java.logging;
     requires javafx.swing;
-    requires org.json;
     requires okhttp3;
     requires org.yaml.snakeyaml;
     requires mslinks;
     requires com.sun.jna.platform;
     requires java.management;
     requires me.t3sl4.util.version;
+    requires me.t3sl4.util.os;
+    requires org.json;
 
     opens me.t3sl4.hydraulic.launcher to javafx.fxml;
     exports me.t3sl4.hydraulic.launcher;

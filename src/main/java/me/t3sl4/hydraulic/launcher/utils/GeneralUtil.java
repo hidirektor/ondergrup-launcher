@@ -5,7 +5,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import me.t3sl4.hydraulic.launcher.Launcher;
-import me.t3sl4.hydraulic.launcher.controller.MainController;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -20,107 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.Objects;
-import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 
 public class GeneralUtil {
-
-    public static final Logger logger = Logger.getLogger(MainController.class.getName());
-
-    private static final String REGISTRY_PATH = "SOFTWARE\\OnderGrup\\HydraulicCalculation";
-    private static final String LICENSE_KEY_NAME = "LicenseKey";
-
-    public static final String PREFERENCE_KEY = "defaultMonitor";
-    public static Preferences prefs;
-
-    public static boolean netIsAvailable() {
-        try {
-            final URL url = new URL("http://www.google.com");
-            final URLConnection conn = url.openConnection();
-            conn.connect();
-            conn.getInputStream().close();
-            return true;
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
-    private static String getMonitorBrand(int index) {
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] devices = ge.getScreenDevices();
-
-        if (index < devices.length) {
-            return devices[index].getIDstring();
-        }
-
-        return "Unknown Monitor";
-    }
-
-    private static void saveSelectedMonitor(String monitor) {
-        prefs.put(PREFERENCE_KEY, monitor);
-    }
-
-    public static String checkDefaultMonitor() {
-        return GeneralUtil.prefs.get(PREFERENCE_KEY, null);
-    }
-
-    private static void deleteFile(String filePath) {
-        File file = new File(filePath);
-        if (file.exists()) {
-            if (file.delete()) {
-                System.out.println("Dosya silindi: " + filePath);
-            } else {
-                System.err.println("Dosya silinemedi: " + filePath);
-            }
-        } else {
-            System.out.println("Dosya bulunamadı: " + filePath);
-        }
-    }
-
-    private static void deleteDirectory(File directory) {
-        if (directory.exists()) {
-            File[] files = directory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isDirectory()) {
-                        deleteDirectory(file);
-                    } else {
-                        deleteFile(file.getAbsolutePath());
-                    }
-                }
-            }
-            if (directory.delete()) {
-                System.out.println("Dizin silindi: " + directory.getAbsolutePath());
-            } else {
-                System.err.println("Dizin silinemedi: " + directory.getAbsolutePath());
-            }
-        } else {
-            System.out.println("Dizin bulunamadı: " + directory.getAbsolutePath());
-        }
-    }
-
-    public static void openFile(String filePath) {
-        File file = new File(filePath);
-
-        if (!file.exists()) {
-            System.out.println("Dosya bulunamadı: " + filePath);
-            return;
-        }
-
-        if (Desktop.isDesktopSupported()) {
-            Desktop desktop = Desktop.getDesktop();
-            try {
-                desktop.open(file);
-                System.out.println("Dosya başarıyla açıldı: " + filePath);
-            } catch (IOException e) {
-                System.out.println("Dosya açılamadı: " + e.getMessage());
-            }
-        } else {
-            System.out.println("Bu platform masaüstü fonksiyonlarını desteklemiyor.");
-        }
-    }
 
     public static void systemShutdown() {
         if(!System.getProperty("os.name").toLowerCase().contains("win")) {

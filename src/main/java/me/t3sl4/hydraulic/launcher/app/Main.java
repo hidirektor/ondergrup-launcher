@@ -8,9 +8,9 @@ import javafx.application.Platform;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import me.t3sl4.hydraulic.launcher.utils.FileUtil;
-import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.SceneUtil;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
+import me.t3sl4.util.os.OSUtil;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.List;
-import java.util.prefs.Preferences;
 
 public class Main extends Application {
     List<Screen> screens = Screen.getScreens();
@@ -28,43 +27,25 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        GeneralUtil.prefs = Preferences.userRoot().node("onderGrupUpdater");
         FileUtil.criticalFileSystem();
+
+        Platform.setImplicitExit(false);
 
         if(!System.getProperty("os.name").toLowerCase().contains("win")) {
             if (!checkSingleInstance()) {
                 System.out.println("Program zaten çalışıyor. Odaklanıyor...");
-                focusApp("Önder Grup Launcher " + SystemVariables.getVersion());
+                focusApp("Canicula Launcher " + SystemVariables.getVersion());
                 Platform.exit();
                 return;
             }
         }
 
-        checkVersionFromPrefs();
-
-        Platform.setImplicitExit(false);
+        OSUtil.updateLocalVersion(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_LAUNCHER_KEY, SystemVariables.getVersion());
 
         defaultScreen = screens.get(0);
         SceneUtil.openMainScreen(screens.get(0));
 
-        System.out.println("Önder Grup Updater servisi başlatıldı.");
-    }
-
-    private void checkVersionFromPrefs() {
-        String launcherVersionKey = "launcher_version";
-        String hydraulicVersionKey = "hydraulic_version";
-
-        String currentVersion = SystemVariables.CURRENT_VERSION;
-
-        String savedLauncherVersion = GeneralUtil.prefs.get(launcherVersionKey, null);
-        String savedHydraulicVersion = GeneralUtil.prefs.get(hydraulicVersionKey, "unknown");
-
-        if (savedLauncherVersion == null || !savedLauncherVersion.equals(currentVersion)) {
-            GeneralUtil.prefs.put(launcherVersionKey, currentVersion);
-            savedLauncherVersion = GeneralUtil.prefs.get(launcherVersionKey, null);
-        }
-
-        System.out.println("Launcher sürümü: " + savedLauncherVersion);
+        System.out.println("Canicula launcher başlatıldı.");
     }
 
     private static boolean checkSingleInstance() {

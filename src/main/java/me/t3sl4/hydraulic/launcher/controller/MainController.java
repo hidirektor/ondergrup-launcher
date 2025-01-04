@@ -28,17 +28,14 @@ import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.HTTP.HttpUtil;
 import me.t3sl4.hydraulic.launcher.utils.Model.User;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
+import me.t3sl4.util.os.OSUtil;
 import me.t3sl4.util.version.DownloadProgressListener;
 import me.t3sl4.util.version.VersionUtil;
 import mslinks.ShellLink;
-import org.json.JSONObject;
 
 import javax.swing.filechooser.FileSystemView;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -358,10 +355,8 @@ public class MainController implements Initializable {
             @Override
             protected Void call() {
                 try {
-                    String hydraulicVersionKey = "hydraulic_version";
-                    String currentVersion = GeneralUtil.prefs.get(hydraulicVersionKey, "unknown");
-
-                    String latestVersion = fetchLatestVersionFromGitHub();
+                    String currentVersion = SystemVariables.getVersion();
+                    String latestVersion = VersionUtil.getLatestVersion(SystemVariables.REPO_OWNER, SystemVariables.HYDRAULIC_REPO_NAME);
 
                     if (latestVersion != null && !latestVersion.equals(currentVersion)) {
                         Platform.runLater(() -> updateStatusLabel.setText("Yeni sürüm mevcut: " + latestVersion));
@@ -521,6 +516,8 @@ public class MainController implements Initializable {
                             hydraulicFileName,
                             downloadListener
                     );
+
+                    OSUtil.updatePrefData(SystemVariables.PREF_NODE_NAME, SystemVariables.PREF_HYDRAULIC_KEY, VersionUtil.getLatestVersion(SystemVariables.REPO_OWNER, SystemVariables.HYDRAULIC_REPO_NAME));
                 } catch (Exception e){
                     System.out.println(e.getMessage());
                 }
@@ -854,23 +851,5 @@ public class MainController implements Initializable {
         } else {
             System.out.println("Kısayol bulunamadı: " + path);
         }
-    }
-
-    private String fetchLatestVersionFromGitHub() throws IOException {
-        URL url = new URL("https://api.github.com/repos/hidirektor/ondergrup-hydraulic-tool/releases/latest");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String inputLine;
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        JSONObject jsonResponse = new JSONObject(response.toString());
-        return jsonResponse.getString("tag_name");
     }
 }
