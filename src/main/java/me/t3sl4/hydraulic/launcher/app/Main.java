@@ -50,7 +50,7 @@ public class Main extends Application {
 
     private static boolean checkSingleInstance() {
         String pid = java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
-        File lockFile = new File(System.getProperty("user.home"), ".onder_grup_launcher.pid");
+        File lockFile = new File(System.getProperty("user.home"), ".canicula_launcher.pid");
 
         try {
             if (lockFile.exists()) {
@@ -92,9 +92,9 @@ public class Main extends Application {
             try {
                 SystemTray tray = SystemTray.getSystemTray();
                 for (TrayIcon icon : tray.getTrayIcons()) {
-                    if (icon.getToolTip().equals("Önder Grup Launcher")) {
+                    if (icon.getToolTip().equals("Canicula Launcher")) {
                         icon.displayMessage(
-                                "Önder Grup Launcher",
+                                "Canicula Launcher",
                                 "Restoring from system tray...",
                                 TrayIcon.MessageType.INFO
                         );

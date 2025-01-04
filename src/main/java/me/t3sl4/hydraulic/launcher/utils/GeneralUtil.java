@@ -25,7 +25,7 @@ public class GeneralUtil {
     public static void systemShutdown() {
         if(!System.getProperty("os.name").toLowerCase().contains("win")) {
             try {
-                Path lockFilePath = Path.of(System.getProperty("user.home"), ".onder_grup_launcher.pid");
+                Path lockFilePath = Path.of(System.getProperty("user.home"), ".canicula_launcher.pid");
                 Files.deleteIfExists(lockFilePath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -105,7 +105,7 @@ public class GeneralUtil {
                 // Convert JavaFX Image to BufferedImage
                 BufferedImage awtImage = SwingFXUtils.fromFXImage(fxImage, null);
 
-                TrayIcon trayIcon = new TrayIcon(awtImage, "Önder Grup Launcher");
+                TrayIcon trayIcon = new TrayIcon(awtImage, "Canicula Launcher");
                 trayIcon.setImageAutoSize(true);
 
                 PopupMenu popup = new PopupMenu();
@@ -138,7 +138,7 @@ public class GeneralUtil {
                 })));
 
                 SwingUtilities.invokeLater(() -> Platform.runLater(() -> { trayIcon.displayMessage(
-                        "Önder Grup Launcher",
+                        "Canicula Launcher",
                         "Program arka planda çalışmaya devam ediyor.",
                         TrayIcon.MessageType.INFO
                 );}));

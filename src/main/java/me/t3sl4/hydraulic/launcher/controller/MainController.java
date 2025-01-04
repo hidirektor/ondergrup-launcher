@@ -124,7 +124,7 @@ public class MainController implements Initializable {
     //Tablodan seçilen kullanıcı
     private User selectedUser;
 
-    private Image hydraulicWebImage = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/images/hydraulic-logo.png")), 16, 16, true, true);
+    private Image hydraulicWebImage = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/images/logo-hydraulic.png")), 16, 16, true, true);
     private Image launcherWebImage = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/images/logo.png")), 16, 16, true, true);
 
     @Override
@@ -710,9 +710,6 @@ public class MainController implements Initializable {
                     javafx.scene.input.MouseButton.PRIMARY, 1,
                     true, true, true, true, true, true, true, true, true, true, null
             ));
-        } else {
-            customDataPane.setVisible(false);
-            customDataPane.toBack();
         }
     }
 

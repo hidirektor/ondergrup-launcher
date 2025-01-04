@@ -638,7 +638,7 @@
                      <graphic>
                         <ImageView fx:id="changeLogHydraulicImageView" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../assets/images/hydraulic-logo.png" />
+                              <Image url="@../../../../../assets/images/logo-hydraulic.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -781,7 +781,7 @@
                                           <Insets right="8.0" />
                                        </HBox.margin>
                                        <image>
-                                          <Image url="@../../../../../assets/images/hydraulic-logo.png" />
+                                          <Image url="@../../../../../assets/images/logo-hydraulic.png" />
                                        </image>
                                     </ImageView>
                                     <Label text="Önder Grup Hydraulic Tool Ayarları" textFill="WHITE" />

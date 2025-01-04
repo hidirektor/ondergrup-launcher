@@ -5,9 +5,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -29,7 +27,7 @@ public class SceneUtil {
         primaryStage.setScene(new Scene(root));
         primaryStage.initStyle(StageStyle.UNDECORATED);
 
-        primaryStage.setTitle("Önder Grup Launcher " + SystemVariables.getVersion());
+        primaryStage.setTitle("Canicula Launcher " + SystemVariables.getVersion());
         Image icon = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/images/logo.png")));
         primaryStage.getIcons().add(icon);
 
@@ -79,7 +77,7 @@ public class SceneUtil {
         primaryStage.initStyle(StageStyle.TRANSPARENT);
 
         // Başlık ve ikon
-        primaryStage.setTitle("Önder Grup Launcher " + SystemVariables.getVersion());
+        primaryStage.setTitle("Canicula Launcher " + SystemVariables.getVersion());
         Image icon = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/images/logo.png")));
         primaryStage.getIcons().add(icon);
 
