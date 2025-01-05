@@ -3,13 +3,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/hidirektor/ondergrup-launcher">
-    <img src="readme/onderGrupMain.png" alt="Logo" width="320" height="80">
+    <img src="readme/logo-sade.png" alt="Logo" width="320" height="80">
   </a>
 
-<h3 align="center">Önder Launcher</h3>
+<h3 align="center">Canicula Launcher</h3>
 
   <p align="center">
-    Önder Launcher is custom solution for desktop products that has been developed for Önder Grup.
+    Canicula Launcher is custom solution for desktop products that has been developed for Canicula.
     <br />
     <br />
     <a href="mailto:hidirektor@gmail.com">Report Bug</a>
@@ -43,19 +43,19 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![ScreenShot][product-screenshot]](https://ondergrup.com)
-[![ScreenShot-2][product-screenshot2]](https://ondergrup.com)
-[![ScreenShot-3][product-screenshot3]](https://ondergrup.com)
-[![ScreenShot-4][product-screenshot4]](https://ondergrup.com)
-[![ScreenShot-5][product-screenshot5]](https://ondergrup.com)
+[![ScreenShot][product-screenshot]]
+[![ScreenShot-2][product-screenshot2]]
+[![ScreenShot-3][product-screenshot3]]
+[![ScreenShot-4][product-screenshot4]]
+[![ScreenShot-5][product-screenshot5]]
 
-Capabilities of Önder Launcher:
-* Update checker for Önder Grup Hydraulic Tool
-* Auto update for Önder Grup Hydraulic Tool
+Capabilities of Canicula Launcher:
+* Update checker for Canicula Hydraulic Tool Template
+* Auto update for Canicula Hydraulic Tool Template
 * Tray status on auto update
-* License management for Önder Grup Hydraulic Tool
-* Account management for Önder Grup Hydraulic Tool
-* Embed changelog for Önder Grup Hydraulic Tool
+* License management for Canicula Hydraulic Tool Template
+* Account management for Canicula Hydraulic Tool Template
+* Embed changelog for Canicula  Hydraulic Tool Template
 
 ### Built With
 
@@ -73,7 +73,7 @@ The technologies used during development are as follows:
 ## Usage
 
 There's two steps to you must follow.
-- [x] Download the latest version of Önder Launcher
+- [x] Download the latest version of Canicula Launcher
 - [x] And then just double click it :))
 
 [Releases Page](https://github.com/hidirektor/ondergrup-launcher/releases)
@@ -88,8 +88,8 @@ There's two steps to you must follow.
 - [x] Minimal UI
 - [x] Account Management
 - [x] License Management
-- [x] Update Checker for Önder Grup Hydraulic Tool
-- [x] Auto Update for Önder Grup Hydraulic Tool
+- [x] Update Checker for Canicula Hydraulic Tool Template
+- [x] Auto Update for Canicula Hydraulic Tool Template
 - [x] Embed tray on closed state.
 - [x] Main account for critical sub system control section.
 - [x] Shortcut & Auto Start controller.
