@@ -23,12 +23,13 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import me.t3sl4.hydraulic.launcher.Launcher;
-import me.t3sl4.hydraulic.launcher.utils.FileUtil;
 import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.HTTP.HttpUtil;
 import me.t3sl4.hydraulic.launcher.utils.Model.User;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
+import me.t3sl4.util.file.FileUtil;
 import me.t3sl4.util.os.OSUtil;
+import me.t3sl4.util.os.desktop.DesktopUtil;
 import me.t3sl4.util.version.DownloadProgressListener;
 import me.t3sl4.util.version.VersionUtil;
 import mslinks.ShellLink;
@@ -157,7 +158,7 @@ public class MainController implements Initializable {
             });
         });
 
-        FileUtil.readUserAccountData(savedUserAccounts);
+        GeneralUtil.readUserAccountData(savedUserAccounts);
         populateUIWithCachedData(savedUserAccounts, null);
         setupSearchBar(accountSearchBar, savedUserAccounts);
     }
@@ -283,9 +284,9 @@ public class MainController implements Initializable {
                 String iconPath = SystemVariables.mainPath + "\\" + iconName + ".exe";
                 String targetPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 if (newVal) {
-                    createDesktopShortcut(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
+                    DesktopUtil.createDesktopShortcut(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
-                    deleteShortcut(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\" + fileName + ".exe" + ".lnk");
+                    FileUtil.deleteFile(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\" + fileName + ".exe" + ".lnk");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -299,9 +300,9 @@ public class MainController implements Initializable {
                 String iconPath = SystemVariables.mainPath + "\\" + iconName + ".exe";
                 String targetPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 if (newVal) {
-                    addToStartup(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
+                    DesktopUtil.addToStartup(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
-                    deleteShortcut(System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\" + fileName + ".exe" + ".lnk");
+                    FileUtil.deleteFile(System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\" + fileName + ".exe" + ".lnk");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -314,9 +315,9 @@ public class MainController implements Initializable {
                 String iconPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 String targetPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 if (newVal) {
-                    createDesktopShortcut(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
+                    DesktopUtil.createDesktopShortcut(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
-                    deleteShortcut(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\" + fileName + ".exe" + ".lnk");
+                    FileUtil.deleteFile(FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath() + "\\" + fileName + ".exe" + ".lnk");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -329,9 +330,9 @@ public class MainController implements Initializable {
                 String iconPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 String targetPath = SystemVariables.mainPath + "\\" + fileName + ".exe";
                 if (newVal) {
-                    addToStartup(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
+                    DesktopUtil.addToStartup(fileName + ".exe", targetPath, iconPath, SystemVariables.mainPath);
                 } else {
-                    deleteShortcut(System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\" + fileName + ".exe" + ".lnk");
+                    FileUtil.deleteFile(System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\" + fileName + ".exe" + ".lnk");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -566,7 +567,7 @@ public class MainController implements Initializable {
         String formattedDate = sdf.format(calendar.getTime());
         selectedUser.setDeletionDate(formattedDate);
 
-        FileUtil.deleteUserInFile(selectedUser);
+        GeneralUtil.deleteUserInFile(selectedUser);
     }
 
     @FXML
@@ -741,7 +742,7 @@ public class MainController implements Initializable {
 
             customFavouriteButton.setImage(newIcon);
 
-            FileUtil.updateUserFavouriteStatusInFile(selectedUser);
+            GeneralUtil.updateUserFavouriteStatusInFile(selectedUser);
             System.out.println("User favourite status updated: " + selectedUser);
         });
 
@@ -788,65 +789,5 @@ public class MainController implements Initializable {
             });
             pause.playFromStart();
         });
-    }
-
-    public static void createDesktopShortcut(String fileName, String targetPath, String iconPath, String workingDirectory) throws IOException {
-        // Masaüstü dizinini al
-        File home = FileSystemView.getFileSystemView().getHomeDirectory();
-        String desktopPath = home.getAbsolutePath();
-        File desktopDir = new File(desktopPath);
-
-        // Masaüstü dizinini kontrol et ve gerekirse oluştur
-        if (!desktopDir.exists() && !desktopDir.mkdirs()) {
-            throw new IOException("Masaüstü dizini oluşturulamadı: " + desktopPath);
-        }
-
-        String shortcutPath = desktopPath + "\\" + fileName + ".lnk";
-
-        // Kısayolu oluştur
-        ShellLink sl = new ShellLink()
-                .setTarget(targetPath)
-                .setWorkingDir(workingDirectory)
-                .setIconLocation(iconPath); // İkon olarak aynı dosya ayarlanıyor
-        sl.getHeader().setIconIndex(0); // İkonun dizin numarası
-
-        // Kısayolu kaydet
-        sl.saveTo(shortcutPath);
-        System.out.println("Kısayol oluşturuldu: " + shortcutPath);
-    }
-
-    public static void addToStartup(String fileName, String targetPath, String iconPath, String workingDirectory) throws IOException {
-        // Windows başlangıç klasörünü al
-        String startupPath = System.getProperty("user.home") + "\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup";
-        File startupDir = new File(startupPath);
-
-        // Başlangıç dizinini kontrol et ve gerekirse oluştur
-        if (!startupDir.exists() && !startupDir.mkdirs()) {
-            throw new IOException("Başlangıç dizini oluşturulamadı: " + startupPath);
-        }
-
-        String shortcutPath = startupPath + "\\" + fileName + ".lnk";
-
-        // Kısayolu oluştur
-        ShellLink sl = new ShellLink()
-                .setTarget(targetPath)
-                .setWorkingDir(workingDirectory)
-                .setIconLocation(iconPath); // İkon olarak aynı dosya ayarlanıyor
-        sl.getHeader().setIconIndex(0); // İkonun dizin numarası
-
-        // Kısayolu kaydet
-        sl.saveTo(shortcutPath);
-        System.out.println("Başlangıç klasörüne eklendi: " + shortcutPath);
-    }
-
-    private void deleteShortcut(String path) throws IOException {
-        File shortcut = new File(path);
-        if (shortcut.exists()) {
-            if (!shortcut.delete()) {
-                throw new IOException("Kısayol silinemedi: " + path);
-            }
-        } else {
-            System.out.println("Kısayol bulunamadı: " + path);
-        }
     }
 }

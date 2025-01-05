@@ -18,6 +18,7 @@ module me.t3sl4.hydraulic.launcher {
     requires me.t3sl4.util.version;
     requires me.t3sl4.util.os;
     requires org.json;
+    requires me.t3sl4.util.file;
 
     opens me.t3sl4.hydraulic.launcher to javafx.fxml;
     exports me.t3sl4.hydraulic.launcher;

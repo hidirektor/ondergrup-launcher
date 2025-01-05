@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import me.t3sl4.hydraulic.launcher.Launcher;
-import me.t3sl4.hydraulic.launcher.utils.FileUtil;
 import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
 import org.json.JSONObject;
@@ -122,7 +121,7 @@ public class HttpUtil {
                                             e.printStackTrace();
                                         }
 
-                                        FileUtil.createUserAccountData(userNameData, passwordData, nameSurnameData[0], licenseKeyData, accessTokenData, false);
+                                        GeneralUtil.createUserAccountData(userNameData, passwordData, nameSurnameData[0], licenseKeyData, accessTokenData, false);
 
                                         mainPane.setVisible(false);
                                         mainPane.toBack();
@@ -138,7 +137,7 @@ public class HttpUtil {
                                         e.printStackTrace();
                                     }
 
-                                    FileUtil.createUserAccountData(userNameData, passwordData, nameSurnameData[0], null, accessTokenData, false);
+                                    GeneralUtil.createUserAccountData(userNameData, passwordData, nameSurnameData[0], null, accessTokenData, false);
 
                                     mainPane.setVisible(false);
                                     mainPane.toBack();

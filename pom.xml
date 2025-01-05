@@ -110,11 +110,6 @@
             <version>2.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.vatbub</groupId>
-            <artifactId>mslinks</artifactId>
-            <version>1.0.6.2</version>
-        </dependency>
-        <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
             <version>5.13.0</version>
@@ -132,7 +127,12 @@
         <dependency>
             <groupId>com.github.hidirektor</groupId>
             <artifactId>os-util</artifactId>
-            <version>v1.0.2</version>
+            <version>v1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.hidirektor</groupId>
+            <artifactId>file-util</artifactId>
+            <version>v1.0.4</version>
         </dependency>
     </dependencies>
 

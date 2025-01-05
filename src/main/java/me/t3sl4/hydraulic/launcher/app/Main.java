@@ -7,7 +7,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import me.t3sl4.hydraulic.launcher.utils.FileUtil;
+import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.SceneUtil;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
 import me.t3sl4.util.os.OSUtil;
@@ -27,7 +27,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FileUtil.criticalFileSystem();
+        GeneralUtil.criticalFileSystem();
 
         Platform.setImplicitExit(false);
 
