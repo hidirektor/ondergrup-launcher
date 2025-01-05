@@ -8,7 +8,6 @@ import me.t3sl4.hydraulic.launcher.Launcher;
 import me.t3sl4.hydraulic.launcher.utils.Model.User;
 import me.t3sl4.util.file.DirectoryUtil;
 import me.t3sl4.util.file.FileUtil;
-import org.json.JSONObject;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -16,11 +15,14 @@ import org.yaml.snakeyaml.Yaml;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,31 +42,6 @@ public class GeneralUtil {
 
         Platform.exit();
         System.exit(0);
-    }
-
-    public static void openFolder(String path) {
-        try {
-            // Dosya nesnesi oluştur
-            File folder = new File(path);
-
-            // Klasörün varlığını kontrol et
-            if (!folder.exists()) {
-                System.err.println("Error: Path does not exist: " + path);
-                return;
-            }
-
-            // Desktop API ile klasörü aç
-            if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                desktop.open(folder);
-                System.out.println("Folder opened: " + path);
-            } else {
-                System.err.println("Error: Desktop API is not supported on this system.");
-            }
-        } catch (IOException e) {
-            System.err.println("Error opening folder: " + path);
-            e.printStackTrace();
-        }
     }
 
     public static void openURL(String url) {
@@ -156,96 +133,6 @@ public class GeneralUtil {
                 e.printStackTrace();
             }
         });
-    }
-
-    public static String getDeviceInfoAsJson() {
-        try {
-            String osName = System.getProperty("os.name");
-            String osVersion = System.getProperty("os.version");
-            String osArch = System.getProperty("os.arch");
-            int availableProcessors = Runtime.getRuntime().availableProcessors();
-
-            long maxMemory = Runtime.getRuntime().maxMemory();
-            long totalMemory = Runtime.getRuntime().totalMemory();
-
-            String ipAddress = getIpAddress();
-            String externalIpAddress = getExternalIpAddress();
-            String hwid = getHardwareId();
-
-            JSONObject deviceInfoJson = new JSONObject();
-            deviceInfoJson.put("osName", osName);
-            deviceInfoJson.put("osVersion", osVersion);
-            deviceInfoJson.put("osArch", osArch);
-            deviceInfoJson.put("availableProcessors", availableProcessors);
-            deviceInfoJson.put("maxMemory", maxMemory);
-            deviceInfoJson.put("totalMemory", totalMemory);
-            deviceInfoJson.put("ipAddress", ipAddress);
-            deviceInfoJson.put("externalIpAddress", externalIpAddress);
-            deviceInfoJson.put("hwid", hwid);
-
-            return deviceInfoJson.toString(4);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "{}";
-        }
-    }
-
-    private static String getIpAddress() {
-        try {
-            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-            while (networkInterfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = networkInterfaces.nextElement();
-
-                if (networkInterface.isUp() && !networkInterface.isLoopback()) {
-                    Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
-                    while (inetAddresses.hasMoreElements()) {
-                        InetAddress inetAddress = inetAddresses.nextElement();
-                        if (inetAddress instanceof Inet4Address) {
-                            return inetAddress.getHostAddress();
-                        }
-                    }
-                }
-            }
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        return "Unknown";
-    }
-
-    private static String getExternalIpAddress() {
-        String ipAddress = "Unknown";
-        try {
-            URL url = new URL("http://api.ipify.org");
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            ipAddress = reader.readLine();
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ipAddress;
-    }
-
-    private static String getHardwareId() {
-        try {
-            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-            while (networkInterfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = networkInterfaces.nextElement();
-                if (networkInterface != null && !networkInterface.isLoopback() && networkInterface.getHardwareAddress() != null) {
-                    byte[] macBytes = networkInterface.getHardwareAddress();
-                    StringBuilder macAddress = new StringBuilder();
-                    for (byte b : macBytes) {
-                        macAddress.append(String.format("%02X", b));
-                    }
-                    return macAddress.toString();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "Unknown";
     }
 
     public static void criticalFileSystem() throws IOException {

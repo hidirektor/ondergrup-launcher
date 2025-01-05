@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import me.t3sl4.hydraulic.launcher.Launcher;
 import me.t3sl4.hydraulic.launcher.utils.GeneralUtil;
 import me.t3sl4.hydraulic.launcher.utils.SystemVariables;
+import me.t3sl4.util.os.device.DeviceUtil;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -18,7 +19,7 @@ public class HttpUtil {
         JSONObject licenseJson = new JSONObject();
         licenseJson.put("licenseKey", licenseKey);
         licenseJson.put("activatedBy", activatedBy);
-        licenseJson.put("deviceInfo", GeneralUtil.getDeviceInfoAsJson().toString());
+        licenseJson.put("deviceInfo", DeviceUtil.getDeviceInfoAsJson().toString());
 
         HTTPMethod.sendAuthorizedJsonRequest(licenseUrl, "POST", licenseJson.toString(), accessToken, new HTTPMethod.RequestCallback() {
             @Override
@@ -105,7 +106,7 @@ public class HttpUtil {
                         String roleValue = userObject.getString("userType");
                         if (roleValue.equals("TECHNICIAN") || roleValue.equals("ENGINEER") || roleValue.equals("SYSOP")) {
                             String activateLicense = SystemVariables.BASE_URL + SystemVariables.activateLicenseUrlPrefix;
-                            String activateLicenseJsonBody = "{\"activatedBy\": \"" + userID + "\", \"licenseKey\": \"" + licenseKey + "\", \"deviceInfo\": \"" + GeneralUtil.getDeviceInfoAsJson() + "\"}";
+                            String activateLicenseJsonBody = "{\"activatedBy\": \"" + userID + "\", \"licenseKey\": \"" + licenseKey + "\", \"deviceInfo\": \"" + DeviceUtil.getDeviceInfoAsJson() + "\"}";
 
                             HTTPMethod.sendAuthorizedJsonRequest(activateLicense, "POST", activateLicenseJsonBody, accessToken, new HTTPMethod.RequestCallback() {
                                 @Override

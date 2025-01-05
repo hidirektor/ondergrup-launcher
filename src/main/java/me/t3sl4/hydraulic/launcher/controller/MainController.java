@@ -32,7 +32,6 @@ import me.t3sl4.util.os.OSUtil;
 import me.t3sl4.util.os.desktop.DesktopUtil;
 import me.t3sl4.util.version.DownloadProgressListener;
 import me.t3sl4.util.version.VersionUtil;
-import mslinks.ShellLink;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
@@ -423,15 +422,15 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    public void openFolder(ActionEvent actionEvent) {
+    public void openFolder(ActionEvent actionEvent) throws IOException {
         if(actionEvent.getSource() == mainProgramFolder) {
-            GeneralUtil.openFolder(SystemVariables.mainPath);
+            DesktopUtil.startExternalApplication(SystemVariables.mainPath);
         } else if(actionEvent.getSource() == localHydraulicDataFolder) {
-            GeneralUtil.openFolder(SystemVariables.localHydraulicDataPath);
+            DesktopUtil.startExternalApplication(SystemVariables.localHydraulicDataPath);
         } else if(actionEvent.getSource() == userDataFolder) {
-            GeneralUtil.openFolder(SystemVariables.userDataPath);
+            DesktopUtil.startExternalApplication(SystemVariables.userDataPath);
         } else if(actionEvent.getSource() == partListFolder) {
-            GeneralUtil.openFolder(SystemVariables.partListDataPath);
+            DesktopUtil.startExternalApplication(SystemVariables.partListDataPath);
         } else {
             System.err.println("Error: Unknown source triggered openFolder: " + actionEvent.getSource());
         }
