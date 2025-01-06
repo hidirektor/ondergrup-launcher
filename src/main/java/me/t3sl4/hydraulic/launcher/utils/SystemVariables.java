@@ -1,7 +1,7 @@
 package me.t3sl4.hydraulic.launcher.utils;
 
 public class SystemVariables {
-    public static final String CURRENT_VERSION = "v1.3.3";
+    public static final String CURRENT_VERSION = "v1.3.4";
 
     public static String REPO_OWNER = "hidirektor";
     public static String HYDRAULIC_REPO_NAME = "ondergrup-hydraulic-tool";
@@ -12,6 +12,7 @@ public class SystemVariables {
     public static String PREF_HYDRAULIC_KEY = "hydraulic_version";
 
     public static String BASE_URL = "https://ondergrup.hidirektor.com.tr/api/v2";
+    public static String DOCS_URL = BASE_URL + "/api-docs/";
 
     public static String WEB_URL = "https://ondergrup.com";
     public static String BASE_LOGIN_URL = "https://ondergrup.hidirektor.com.tr/#/login";

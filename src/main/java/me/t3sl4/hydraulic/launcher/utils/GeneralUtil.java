@@ -19,8 +19,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -326,6 +328,20 @@ public class GeneralUtil {
             }
         } catch (IOException e) {
             System.out.println("Error updating user favourite status: " + e.getMessage());
+        }
+    }
+
+    public static boolean pingServer(String url) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.connect();
+            int responseCode = connection.getResponseCode();
+            return (responseCode >= 200 && responseCode < 300);
+        } catch (IOException e) {
+            return false;
         }
     }
 }

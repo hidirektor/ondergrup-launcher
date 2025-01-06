@@ -243,11 +243,11 @@
                         <Font name="TextaAlt-Regular" size="12.0" />
                      </font>
                   </Button>
-                  <Button alignment="BASELINE_LEFT" mnemonicParsing="false" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Trash" textFill="WHITE" visible="false">
+                  <Button alignment="BASELINE_LEFT" mnemonicParsing="false" onAction="#checkServerStatus" prefHeight="25.0" prefWidth="219.0" stylesheets="@../styling/style.css" text="Sunucu Durumu" textFill="WHITE">
                      <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="serverStatusIcon" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../assets/icons/icon_trash.png" />
+                              <Image url="@../../../../../assets/icons/icon_server_down.png" />
                            </image>
                         </ImageView>
                      </graphic>

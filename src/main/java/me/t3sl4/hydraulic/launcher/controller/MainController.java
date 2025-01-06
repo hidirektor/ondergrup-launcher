@@ -113,6 +113,9 @@ public class MainController implements Initializable {
     @FXML
     private ImageView changeLogLauncherImageView, changeLogHydraulicImageView;
 
+    @FXML
+    private ImageView serverStatusIcon;
+
     //Ekran büyütüp küçültme
     private boolean stageMaximized = false;
     private boolean isHidden = true;
@@ -134,6 +137,8 @@ public class MainController implements Initializable {
 
             // Program büyültme, küçültme ve kapatma için hover efekti
             addHoverEffect(closeIcon, minimizeIcon, expandIcon);
+
+            checkServerStatus();
 
             changeLogLauncherImageView.setImage(launcherWebImage);
             changeLogHydraulicImageView.setImage(hydraulicWebImage);
@@ -419,6 +424,23 @@ public class MainController implements Initializable {
         });
 
         showHidePasswordImageView.setOnMouseClicked(event -> togglePasswordVisibility());
+    }
+
+    @FXML
+    public void checkServerStatus() {
+        Image ICON_SERVER_UP = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/icons/icon_server_up.png")));
+        Image ICON_SERVER_DOWN = new Image(Objects.requireNonNull(Launcher.class.getResourceAsStream("/assets/icons/icon_server_down.png")));
+
+        new Thread(() -> {
+            boolean isServerUp = GeneralUtil.pingServer(SystemVariables.DOCS_URL);
+            Platform.runLater(() -> {
+                if (isServerUp) {
+                    serverStatusIcon.setImage(ICON_SERVER_UP);
+                } else {
+                    serverStatusIcon.setImage(ICON_SERVER_DOWN);
+                }
+            });
+        }).start();
     }
 
     @FXML
