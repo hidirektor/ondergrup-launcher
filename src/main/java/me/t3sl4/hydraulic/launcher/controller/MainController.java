@@ -424,13 +424,13 @@ public class MainController implements Initializable {
     @FXML
     public void openFolder(ActionEvent actionEvent) throws IOException {
         if(actionEvent.getSource() == mainProgramFolder) {
-            DesktopUtil.startExternalApplication(SystemVariables.mainPath);
+            DesktopUtil.startExternalApplicationAsync(SystemVariables.mainPath);
         } else if(actionEvent.getSource() == localHydraulicDataFolder) {
-            DesktopUtil.startExternalApplication(SystemVariables.localHydraulicDataPath);
+            DesktopUtil.startExternalApplicationAsync(SystemVariables.localHydraulicDataPath);
         } else if(actionEvent.getSource() == userDataFolder) {
-            DesktopUtil.startExternalApplication(SystemVariables.userDataPath);
+            DesktopUtil.startExternalApplicationAsync(SystemVariables.userDataPath);
         } else if(actionEvent.getSource() == partListFolder) {
-            DesktopUtil.startExternalApplication(SystemVariables.partListDataPath);
+            DesktopUtil.startExternalApplicationAsync(SystemVariables.partListDataPath);
         } else {
             System.err.println("Error: Unknown source triggered openFolder: " + actionEvent.getSource());
         }
